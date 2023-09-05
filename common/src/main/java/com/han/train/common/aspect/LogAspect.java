@@ -1,4 +1,4 @@
-package com.han.train.member.aspect;
+package com.han.train.common.aspect;
 
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
