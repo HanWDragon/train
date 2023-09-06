@@ -1,6 +1,8 @@
 package com.han.train.member.service;
 
 import cn.hutool.core.collection.CollUtil;
+import com.han.train.common.exception.BusinessException;
+import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.member.domain.Member;
 import com.han.train.member.domain.MemberExample;
 import com.han.train.member.mapper.MemberMapper;
@@ -36,7 +38,7 @@ public class MemberService {
         if (CollUtil.isNotEmpty(members)) {
             // 这是一种做法，还有一种做法是抛出异常中断业务
 //            return members.get(0).getId();
-            throw new RuntimeException("手机号已注册");
+            throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_EXIST);
         }
 
 
