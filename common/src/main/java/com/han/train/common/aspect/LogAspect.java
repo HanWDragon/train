@@ -45,7 +45,7 @@ public class LogAspect {
     public void doBefore(JoinPoint joinPoint) {
 
         // 增加日志流水号
-        MDC.put("LOG_ID",System.currentTimeMillis() + RandomUtil.randomString(3));
+        MDC.put("LOG_ID", System.currentTimeMillis() + RandomUtil.randomString(3));
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -74,10 +74,12 @@ public class LogAspect {
             arguments[i] = args[i];
         }
         // 排除字段，敏感字段或太长的字段不显示：身份证、手机号、邮箱、密码等
-        String[] excludeProperties = {"mobile"};
+        // 但是现在是开发阶段。屏蔽了这些不好纠错于是都注释了，但是这些信息都是不能出现在日志中的
+//        String[] excludeProperties = {"mobile"};
+        String[] excludeProperties = {};
         SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
         filter.getExcludes().addAll(List.of(excludeProperties));
-        LOG.info("请求参数: {}", JSON.toJSONString(arguments,filter, JSONWriter.Feature.WriteMapNullValue));
+        LOG.info("请求参数: {}", JSON.toJSONString(arguments, filter, JSONWriter.Feature.WriteMapNullValue));
     }
 
     @Around("controllerPointcut()")
@@ -85,10 +87,12 @@ public class LogAspect {
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
         // 排除字段，敏感字段或太长的字段不显示：身份证、手机号、邮箱、密码等
-        String[] excludeProperties = {"mobile"};
+        // 但是现在是开发阶段。屏蔽了这些不好纠错于是都注释了，但是这些信息都是不能出现在日志中的
+//        String[] excludeProperties = {"mobile"};
+        String[] excludeProperties = {};
         SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
         filter.getExcludes().addAll(List.of(excludeProperties));
-        LOG.info("返回结果: {}",JSON.toJSONString(result,filter, JSONWriter.Feature.WriteMapNullValue));
+        LOG.info("返回结果: {}", JSON.toJSONString(result, filter, JSONWriter.Feature.WriteMapNullValue));
         LOG.info("------------- 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
         return result;
     }
