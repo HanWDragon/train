@@ -1,11 +1,14 @@
 package com.han.train.member.requset;
 
+import jakarta.validation.constraints.NotBlank;
+
 /**
  * @author Han
  * @date 2023年09月06日 09:35
  */
 public class MemberRegisterReq {
 
+    @NotBlank(message = "【手机号】不能为空")
     public String mobile;
 
     public String getMobile() {

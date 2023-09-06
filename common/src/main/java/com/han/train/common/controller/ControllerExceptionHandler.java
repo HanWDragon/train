@@ -4,6 +4,7 @@ import com.han.train.common.exception.BusinessException;
 import com.han.train.common.response.CommonResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,6 +49,23 @@ public class ControllerExceptionHandler {
         LOG.error("业务异常：{}", e.getE().getDesc());
         commonResp.setSuccess(false);
         commonResp.setMessage(e.getE().getDesc());
+        return commonResp;
+    }
+
+
+    /**
+     * 校验异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseBody
+    public CommonResp<?> exceptionHandler(MethodArgumentNotValidException e) {
+        CommonResp<?> commonResp = new CommonResp<>();
+        LOG.error("校验异常：{}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        commonResp.setSuccess(false);
+//      这里图简单只返回第一个错误，你也可以写返回所有的错误，但是通常查日志就能解决问题。
+        commonResp.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return commonResp;
     }
 
