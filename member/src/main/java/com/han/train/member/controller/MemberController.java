@@ -2,6 +2,7 @@ package com.han.train.member.controller;
 
 import com.han.train.common.response.CommonResp;
 import com.han.train.member.requset.MemberRegisterReq;
+import com.han.train.member.requset.MemberSendCodeReq;
 import com.han.train.member.service.MemberService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -28,5 +29,11 @@ public class MemberController {
     public CommonResp<Long> register(@Valid MemberRegisterReq req) {
         long register = memberService.register(req);
         return new CommonResp<>(register);
+    }
+
+    @PostMapping("/send_code")
+    public CommonResp<Long> sendCode(@Valid MemberSendCodeReq req) {
+        memberService.sendCode(req);
+        return new CommonResp<>();
     }
 }

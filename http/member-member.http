@@ -11,7 +11,9 @@ mobile=13487045829
 
 ###
 
-GET http://localhost:8000/member/member/register
-Accept: application/json
+POST http://localhost:8000/member/member/send_code
+Content-Type: application/x-www-form-urlencoded
+
+mobile=13487045828
 
 ###
