@@ -3,6 +3,7 @@ package com.han.train.member.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.han.train.common.exception.BusinessException;
 import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.common.util.SnowUtil;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Han
@@ -95,9 +97,13 @@ public class MemberService {
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
 
-        //        String token = JwtUtil.createToken(memberLoginResp.getId(), memberLoginResp.getMobile());
-//        memberLoginResp.setToken(token);
-        return BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
+        String key = "Han";
+        String token = JWTUtil.createToken(map, key.getBytes());
+        memberLoginResp.setToken(token);
+        return memberLoginResp;
 
     }
 

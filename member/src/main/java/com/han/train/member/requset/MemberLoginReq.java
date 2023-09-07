@@ -17,9 +17,12 @@ public class MemberLoginReq {
         final StringBuilder sb = new StringBuilder("MemberLoginReq{");
         sb.append("mobile='").append(mobile).append('\'');
         sb.append(", code='").append(code).append('\'');
+        sb.append(", token='").append(token).append('\'');
         sb.append('}');
         return sb.toString();
     }
+
+    private String token;
 
     public String getCode() {
         return code;
@@ -37,4 +40,11 @@ public class MemberLoginReq {
         this.mobile = mobile;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
