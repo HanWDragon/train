@@ -1,7 +1,7 @@
 <template>
 
   <a-row class="login">
-    <a-col :span="8" :offset="8" class="login-main" >
+    <a-col :span="8" :offset="8" class="login-main">
       <h1 style="text-align: center">
         <rocket-two-tone/>
         仿12306火车票售票系统
@@ -45,6 +45,7 @@
 <script>
 import {defineComponent, reactive} from 'vue';
 import axios from "axios";
+import {notification} from "ant-design-vue";
 
 export default defineComponent({
   name: "LoginView",
@@ -54,33 +55,42 @@ export default defineComponent({
       code: '',
     });
 
-    const onFinish = values => {
-      console.log('Success', values)
-    }
-
-    const onFinishFailed = errorInfo => {
-      console.log('Failed', errorInfo)
-    }
+    const sendCode = () => {
+      axios.post("http://localhost:8000/member/member/send_code", {
+        mobile: loginForm.mobile
+      }).then(response => {
+        let data = response.data;
+        if (data.success) {
+          notification.success({
+            message: '发送验证码成功',
+          });
+          loginForm.code = '8888'
+        } else {
+          notification.error({
+            message: data.message
+          });
+        }
+      });
+    };
 
     const login = () => {
-
-    }
-
-    const  sendCode = () =>{
-      axios.post('http://localhost:8000/member/member/send_code',{
-        'mobile': loginForm.mobile
-      }).then(
-          (request) =>  {
-            console.log(request);
-          }
-      )
-    }
+      axios.post("http://localhost:8000/member/member/login", loginForm).then((response) => {
+        let data = response.data;
+        if (data.success) {
+          notification.success({
+            message: '登录成功😊'
+          });
+        } else {
+          notification.error({
+            message: data.message
+          });
+        }
+      })
+    };
 
 
     return {
       loginForm,
-      onFinish,
-      onFinishFailed,
       login,
       sendCode
     };
