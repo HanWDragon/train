@@ -1,6 +1,13 @@
-<template>
+<template xmlns:color="http://www.w3.org/1999/xhtml">
   <a-layout-header class="header">
     <div class="logo"/>
+    <div style="float: right; color: white">
+      你好：{{ member.mobile }}
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <router-link to="/login" style="color: deepskyblue">
+        退出登录
+      </router-link>
+    </div>
     <a-menu
         v-model:selectedKeys="selectedKeys"
         theme="dark"
@@ -16,13 +23,16 @@
 
 <script>
 import {defineComponent, ref} from 'vue';
+import store from "@/store";
 
 export default defineComponent({
   name: "MainViewHeader",
   setup() {
     const selectedKeys = ref(['2']);
+    let member = store.state.member;
     return {
-      selectedKeys
+      selectedKeys,
+      member
     };
   },
 });
