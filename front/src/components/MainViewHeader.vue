@@ -27,6 +27,11 @@ import store from "@/store";
 
 export default defineComponent({
   name: "MainViewHeader",
+  computed: {
+    store() {
+      return store
+    }
+  },
   setup() {
     const selectedKeys = ref(['2']);
     let member = store.state.member;
