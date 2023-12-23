@@ -22,7 +22,20 @@ const routes = [
         // 添加元数据，在前端进行拦截，而axios是基于后端返回的信息进行验证
         meta: {
             loginRequire: true
-        }
+        },
+        children: [
+            {
+                path: 'welcome',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import('../views/MainComponent/MainViweWelcome.vue')
+            }
+        ]
+    },
+    {
+        path: '',
+        redirect: '/welcome'
     }
 ]
 

@@ -84,7 +84,7 @@ export default defineComponent({
             message: '登录成功😊'
           });
           // 登录成功跳转到控制台主页
-          router.push('/')
+          router.push('/welcome')
           store.commit('setMember', data.content)
         } else {
           notification.error({
