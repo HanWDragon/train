@@ -1,6 +1,5 @@
 package com.han.train.common.aspect;
 
-import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.filter.SimplePropertyPreFilter;
@@ -16,7 +15,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -44,8 +42,8 @@ public class LogAspect {
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) {
 
-        // 增加日志流水号
-        MDC.put("LOG_ID", System.currentTimeMillis() + RandomUtil.randomString(3));
+        // 增加日志流水号,由于AOP生效时间太晚，于是将日志流水号放在拦截器
+//        MDC.put("LOG_ID", System.currentTimeMillis() + RandomUtil.randomString(3));
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

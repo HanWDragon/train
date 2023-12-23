@@ -1,7 +1,7 @@
 ### 注意第一个member是在properties里配置的，第二个是在controller中写的，要分清
 GET http://localhost:8000/member/member/count
 Accept: application/json
-token: 123
+token: {{token}}
 
 ###
 
