@@ -10,7 +10,7 @@ token: {{token}}
 }
 
 ###
-
+# 增加乘车人列表查询接口，只能查看当前会员自己添加的乘客
 GET http://localhost:8000/member/passenger/query-list
 Accept: application/json
 token: {{token}}
