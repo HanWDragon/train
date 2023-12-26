@@ -2,13 +2,19 @@ package com.han.train.member.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.ObjectUtil;
 import com.han.train.common.context.LoginMemberContext;
 import com.han.train.common.util.SnowUtil;
 import com.han.train.member.domain.Passenger;
+import com.han.train.member.domain.PassengerExample;
 import com.han.train.member.mapper.PassengerMapper;
+import com.han.train.member.requset.PassengerQueryReq;
 import com.han.train.member.requset.PassengerSaveReq;
+import com.han.train.member.response.PassengerQuerryResp;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Han
@@ -29,6 +35,18 @@ public class PassengerService {
         passenger.setCreateTime(time);
         passenger.setUpdateTime(time);
         passengerMapper.insert(passenger);
+    }
+
+    // service 层通常是要做的比较通用，controller比较细分，需要接口隔离
+    // 返回的实体一般不实用domain包下的实体，而是自己创建一个方便修改
+    public List<PassengerQuerryResp> queryList(PassengerQueryReq req) {
+        PassengerExample passengerExample = new PassengerExample();
+        PassengerExample.Criteria criteria = passengerExample.createCriteria();
+        if (ObjectUtil.isNotNull(req.getMemberId())) {
+            criteria.andMemberIdEqualTo(req.getMemberId());
+        }
+        List<Passenger> passengerList = passengerMapper.selectByExample(passengerExample);
+        return BeanUtil.copyToList(passengerList, PassengerQuerryResp.class);
     }
 
 }
