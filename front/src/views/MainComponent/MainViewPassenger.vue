@@ -86,10 +86,17 @@ const columns = ref([
   }
 ]);
 
+// 分页的属性是固定的
+const pagination = reactive({
+  total: 0,
+  current: 1,
+  pageSize: 2
+})
+
 onMounted(() => {
   getPassengerList({
     page: 1,
-    size: 10
+    size: 2
   });
 });
 
@@ -105,6 +112,7 @@ const getPassengerList = (param) => {
     if (data.success) {
       // ... 用于展开数组和对象
       passengers.value = data.content.list;
+      pagination.total = data.content.total;
     } else {
       notification.error({
         message: data.message
@@ -161,7 +169,7 @@ const getPassengerList = (param) => {
     </a-modal>
   </p>
 
-  <a-table :dataSource="passengers" :columns="columns"/>
+  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination"/>
 
 </template>
 
