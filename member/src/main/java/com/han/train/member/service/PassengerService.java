@@ -47,7 +47,7 @@ public class PassengerService {
             criteria.andMemberIdEqualTo(req.getMemberId());
         }
         // 一般将分页和查询放在一起，因为这个是一次性的
-        PageHelper.startPage(1, 2);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Passenger> passengerList = passengerMapper.selectByExample(passengerExample);
         return BeanUtil.copyToList(passengerList, PassengerQuerryResp.class);
     }

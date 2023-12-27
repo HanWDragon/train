@@ -1,6 +1,8 @@
 package com.han.train.member.requset;
 
-public class PassengerQueryReq {
+import com.han.train.common.request.PageReq;
+
+public class PassengerQueryReq extends PageReq {
 
     private Long memberId;
 
