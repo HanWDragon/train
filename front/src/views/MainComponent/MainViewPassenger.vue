@@ -23,6 +23,38 @@ const handleOk = () => {
   });
 };
 
+const dataSource = [
+  {
+    key: '1',
+    name: '胡彦斌',
+    age: 32,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '2',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+]
+
+const columns = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '年龄',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: '住址',
+    dataIndex: 'address',
+    key: 'address',
+  },
+]
 
 const passenger = reactive({
   id: undefined,
@@ -42,48 +74,53 @@ const onFinishFailed = errorInfo => {
 </script>
 
 <template>
-  <a-button type="primary" @click="showModal">增加乘车人信息</a-button>
-  <a-modal v-model:open="open" title="乘车人信息" @ok="handleOk"
-           ok-text="确认" cancel-text="取消"
-  >
-    <a-form
-        :model="passenger"
-        name="basic"
-        :label-col="{ span: 4 }"
-        :wrapper-col="{ span: 8 }"
-        autocomplete="off"
-        @finish="onFinish"
-        @finishFailed="onFinishFailed"
+  <!--  防止表格和按钮重合-->
+  <p>
+    <a-button type="primary" @click="showModal">增加乘车人信息</a-button>
+
+    <a-modal v-model:open="open" title="乘车人信息" @ok="handleOk"
+             ok-text="确认" cancel-text="取消"
     >
-      <a-form-item
-          label="姓名："
-          name="name"
-          :rules="[{ required: true, message: '姓名不能为空!' }]"
+      <a-form
+          :model="passenger"
+          name="basic"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 8 }"
+          autocomplete="off"
+          @finish="onFinish"
+          @finishFailed="onFinishFailed"
       >
-        <a-input v-model:value="passenger.name"/>
-      </a-form-item>
+        <a-form-item
+            label="姓名："
+            name="name"
+            :rules="[{ required: true, message: '姓名不能为空!' }]"
+        >
+          <a-input v-model:value="passenger.name"/>
+        </a-form-item>
 
-      <a-form-item
-          label="身份证："
-          name="idCard"
-          :rules="[{ required: true, message: '身份证不能为空!' }]"
-      >
-        <a-input v-model:value="passenger.idCard"/>
-      </a-form-item>
+        <a-form-item
+            label="身份证："
+            name="idCard"
+            :rules="[{ required: true, message: '身份证不能为空!' }]"
+        >
+          <a-input v-model:value="passenger.idCard"/>
+        </a-form-item>
 
-      <a-form-item label="乘客类型："
-                   :rules="[{ required: true, message: '乘客类型不能为空!' }]"
-      >
-        <a-select v-model:value="passenger.type" placeholder="请选择乘客类型">
-          <a-select-option value="1">成人</a-select-option>
-          <a-select-option value="2">儿童</a-select-option>
-          <a-select-option value="3">学生</a-select-option>
-        </a-select>
-      </a-form-item>
+        <a-form-item label="乘客类型："
+                     :rules="[{ required: true, message: '乘客类型不能为空!' }]"
+        >
+          <a-select v-model:value="passenger.type" placeholder="请选择乘客类型">
+            <a-select-option value="1">成人</a-select-option>
+            <a-select-option value="2">儿童</a-select-option>
+            <a-select-option value="3">学生</a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+  </p>
 
+  <a-table :dataSource="dataSource" :columns="columns"/>
 
-    </a-form>
-  </a-modal>
 </template>
 
 <style scoped>
