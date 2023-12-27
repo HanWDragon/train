@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
@@ -23,39 +23,6 @@ const handleOk = () => {
   });
 };
 
-const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-]
-
-const columns = [
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
-  },
-]
-
 const passenger = reactive({
   id: undefined,
   memberId: undefined,
@@ -71,6 +38,81 @@ const onFinish = values => {
 const onFinishFailed = errorInfo => {
   console.log('Failed:', errorInfo);
 };
+
+// 这里使用ref是因为使用reactive修改内部内容会导致失去响应式
+// {
+//   "success": true,
+//   "message": null,
+//   "content": {
+//   "total": 7,
+//       "list": [
+//     {
+//       "id": 1738430778796281856,
+//       "memberId": 1738366392887021568,
+//       "name": "test",
+//       "idCard": "123321",
+//       "type": "1",
+//       "createTime": "2023-12-23 13:26:10",
+//       "updateTime": "2023-12-23 13:26:10"
+//     },
+//     {
+//       "id": 1738430800451473408,
+//       "memberId": 1738366392887021568,
+//       "name": "test",
+//       "idCard": "123321",
+//       "type": "1",
+//       "createTime": "2023-12-23 13:26:15",
+//       "updateTime": "2023-12-23 13:26:15"
+//     }
+//   ]
+//  }
+// }
+let passengers = ref([]);
+const columns = ref([
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '身份证',
+    dataIndex: 'idCard',
+    key: 'idCard',
+  },
+  {
+    title: '购票人类型',
+    dataIndex: 'type',
+    key: 'type',
+  }
+]);
+
+onMounted(() => {
+  getPassengerList({
+    page: 1,
+    size: 10
+  });
+});
+
+const getPassengerList = (param) => {
+  // axios get请求的参数放在params里
+  axios.get('/member/passenger/query-list', {
+    params: {
+      page: param.page,
+      size: param.size
+    }
+  }).then((response) => {
+    let data = response.data;
+    if (data.success) {
+      // ... 用于展开数组和对象
+      passengers.value = data.content.list;
+    } else {
+      notification.error({
+        message: data.message
+      });
+    }
+  });
+};
+
 </script>
 
 <template>
@@ -119,7 +161,7 @@ const onFinishFailed = errorInfo => {
     </a-modal>
   </p>
 
-  <a-table :dataSource="dataSource" :columns="columns"/>
+  <a-table :dataSource="passengers" :columns="columns"/>
 
 </template>
 
