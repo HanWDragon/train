@@ -96,7 +96,7 @@ const pagination = reactive({
 onMounted(() => {
   getPassengerList({
     page: 1,
-    size: 2
+    size: pagination.pageSize
   });
 });
 
@@ -110,14 +110,23 @@ const getPassengerList = (param) => {
   }).then((response) => {
     let data = response.data;
     if (data.success) {
-      // ... 用于展开数组和对象
+      // ... 用于展开数组和对象 eg: list.push(...data.content.list);
       passengers.value = data.content.list;
+      // 设置分页控件的值
+      pagination.current = param.page;
       pagination.total = data.content.total;
     } else {
       notification.error({
         message: data.message
       });
     }
+  });
+};
+
+const handleTableChange = (pagination) => {
+  getPassengerList({
+    page: pagination.current,
+    size: pagination.pageSize
   });
 };
 
@@ -169,7 +178,7 @@ const getPassengerList = (param) => {
     </a-modal>
   </p>
 
-  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination"/>
+  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange"/>
 
 </template>
 
