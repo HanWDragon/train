@@ -47,6 +47,7 @@ public class PassengerService {
     // 返回的实体一般不实用domain包下的实体，而是自己创建一个方便修改
     public PageResp<PassengerQuerryResp> queryList(PassengerQueryReq req) {
         PassengerExample passengerExample = new PassengerExample();
+        passengerExample.setOrderByClause("id desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
         if (ObjectUtil.isNotNull(req.getMemberId())) {
             criteria.andMemberIdEqualTo(req.getMemberId());

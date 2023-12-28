@@ -7,12 +7,16 @@ const open = ref(false);
 const showModal = () => {
   open.value = true;
 };
-const handleOk = () => {
+const addPassenger = () => {
   axios.post('/member/passenger/save', passenger).then((resp) => {
     let data = resp.data;
     if (data.success) {
       notification.success({
         message: '乘车人添加成功'
+      });
+      getPassengerList({
+        page: pagination.current,
+        size: pagination.pageSize
       });
       open.value = false;
     } else {
@@ -154,7 +158,7 @@ const handleTableChange = (pagination) => {
       </a-space>
     </div>
 
-    <a-modal v-model:open="open" title="乘车人信息" @ok="handleOk"
+    <a-modal v-model:open="open" title="乘车人信息" @ok="addPassenger"
              ok-text="确认" cancel-text="取消"
     >
       <a-form
