@@ -3,7 +3,7 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "memberId": "1",
+  "memberId": "1738366392887021568",
   "name": "test",
   "idCard": "123321",
   "type": "1"
@@ -19,10 +19,19 @@ token: {{token}}
 
 ###
 
-
-POST http://localhost:8000/member/member/login
+POST http://localhost:8000/member/passenger/save
 Content-Type: application/json
+token: {{token}}
 
+{
+  "id": "1738896551654330368",
+  "memberId": "1738366392887021568",
+  "name": "Han",
+  "idCard": "123321",
+  "type": "1"
+}
+
+###
 
 
 ###

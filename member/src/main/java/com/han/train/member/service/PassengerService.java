@@ -35,12 +35,19 @@ public class PassengerService {
     public void save(PassengerSaveReq req) {
         DateTime time = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
-        // 一般在service层都会重新赋值
-        passenger.setId(SnowUtil.getSnowflakeNextId());
-        passenger.setMemberId(LoginMemberContext.getId());
-        passenger.setCreateTime(time);
-        passenger.setUpdateTime(time);
-        passengerMapper.insert(passenger);
+        if (ObjectUtil.isNull(passenger.getId())) {
+            // 一般在service层都会重新赋值
+            passenger.setId(SnowUtil.getSnowflakeNextId());
+            passenger.setMemberId(LoginMemberContext.getId());
+            passenger.setCreateTime(time);
+            passenger.setUpdateTime(time);
+            passengerMapper.insert(passenger);
+        } else {
+//            selective的含义是如果对象有空值，不会更新对应内容，记住还要修改更新时间，其实还要进行数据校验的
+            passenger.setUpdateTime(time);
+            passengerMapper.updateByPrimaryKeySelective(passenger);
+        }
+
     }
 
     // service 层通常是要做的比较通用，controller比较细分，需要接口隔离
