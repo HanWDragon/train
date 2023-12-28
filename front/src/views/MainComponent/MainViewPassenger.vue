@@ -101,6 +101,12 @@ onMounted(() => {
 });
 
 const getPassengerList = (param) => {
+  if (!param) {
+    param = {
+      page: 1,
+      size: pagination.pageSize
+    };
+  }
   // axios get请求的参数放在params里
   axios.get('/member/passenger/query-list', {
     params: {
@@ -134,8 +140,14 @@ const handleTableChange = (pagination) => {
 
 <template>
   <!--  防止表格和按钮重合-->
-  <p>
-    <a-button type="primary" @click="showModal">增加乘车人信息</a-button>
+  <div>
+    <div id="button">
+      <!--      防止组件贴在一起-->
+      <a-space>
+        <a-button type="primary" @click="showModal">增加乘车人信息</a-button>
+        <a-button type="primary" @click="getPassengerList(null)">刷新</a-button>
+      </a-space>
+    </div>
 
     <a-modal v-model:open="open" title="乘车人信息" @ok="handleOk"
              ok-text="确认" cancel-text="取消"
@@ -176,12 +188,15 @@ const handleTableChange = (pagination) => {
         </a-form-item>
       </a-form>
     </a-modal>
-  </p>
+  </div>
 
   <a-table :dataSource="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange"/>
 
 </template>
 
 <style scoped>
+#button {
+  padding-bottom: 20px;
+}
 
 </style>
