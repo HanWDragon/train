@@ -93,6 +93,9 @@ const pagination = reactive({
   pageSize: 2
 })
 
+// 防止用户多次点击
+const loading = ref(false);
+
 onMounted(() => {
   getPassengerList({
     page: 1,
@@ -107,6 +110,7 @@ const getPassengerList = (param) => {
       size: pagination.pageSize
     };
   }
+  loading.value = true;
   // axios get请求的参数放在params里
   axios.get('/member/passenger/query-list', {
     params: {
@@ -114,6 +118,7 @@ const getPassengerList = (param) => {
       size: param.size
     }
   }).then((response) => {
+    loading.value = false;
     let data = response.data;
     if (data.success) {
       // ... 用于展开数组和对象 eg: list.push(...data.content.list);
@@ -190,7 +195,11 @@ const handleTableChange = (pagination) => {
     </a-modal>
   </div>
 
-  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange"/>
+  <a-table :dataSource="passengers"
+           :columns="columns"
+           :pagination="pagination"
+           :loading="loading"
+           @change="handleTableChange"/>
 
 </template>
 
