@@ -5,20 +5,21 @@ import {notification} from "ant-design-vue";
 
 const open = ref(false);
 const onAdd = () => {
+  passenger.value = {};
   open.value = true;
 };
 
 const onEdit = (record) => {
-  passenger.value = record;
+  passenger.value = window.Tool.copy(record);
   open.value = true;
 }
 
 const addPassenger = () => {
-  axios.post('/member/passenger/save', passenger).then((resp) => {
+  axios.post('/member/passenger/save', passenger.value).then((resp) => {
     let data = resp.data;
     if (data.success) {
       notification.success({
-        message: '乘车人添加成功'
+        message: '保存成功'
       });
       getPassengerList({
         page: pagination.value.current,
@@ -151,8 +152,8 @@ const getPassengerList = (param) => {
 
 const handleTableChange = (pagination) => {
   getPassengerList({
-    page: pagination.value.current,
-    size: pagination.value.pageSize
+    page: pagination.current,
+    size: pagination.pageSize
   });
 };
 
