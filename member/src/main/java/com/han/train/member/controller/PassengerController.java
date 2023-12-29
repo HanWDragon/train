@@ -38,4 +38,11 @@ public class PassengerController {
         return new CommonResp<>(list);
     }
 
+//    这个参数就不单封装成一个单独的类，一般删除都是根据ID来删除的，这个接口还要注意权限
+    @DeleteMapping("/delete/{id}")
+    public CommonResp<Object> delete(@Valid @PathVariable Long id) {
+        passengerService.deleteById(id);
+        return new CommonResp<>();
+    }
+
 }

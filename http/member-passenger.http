@@ -32,6 +32,16 @@ token: {{token}}
 }
 
 ###
+DELETE http://localhost:8000/member/passenger/delete/1738435623620055040
+Content-Type: application/json
+token: {{token}}
 
+{
+  "id": "1738896551654330368",
+  "memberId": "1738366392887021568",
+  "name": "Han",
+  "idCard": "123321",
+  "type": "1"
+}
 
 ###
