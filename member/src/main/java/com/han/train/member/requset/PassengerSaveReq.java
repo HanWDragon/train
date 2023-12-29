@@ -1,5 +1,6 @@
 package com.han.train.member.requset;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
@@ -18,8 +19,11 @@ public class PassengerSaveReq {
     @NotBlank(message = "【旅客类型】不能为空")
     private String type;
 
+//    前端传递来的日期就是这个格式，我们传递给前端的也是这个格式的字符串，凡是日期类型的都需要符合这样的约定
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
     public Long getId() {

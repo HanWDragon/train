@@ -1,12 +1,18 @@
 <script setup>
-import {onMounted, reactive, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
 const open = ref(false);
-const showModal = () => {
+const onAdd = () => {
   open.value = true;
 };
+
+const onEdit = (record) => {
+  passenger.value = record;
+  open.value = true;
+}
+
 const addPassenger = () => {
   axios.post('/member/passenger/save', passenger).then((resp) => {
     let data = resp.data;
@@ -15,8 +21,8 @@ const addPassenger = () => {
         message: '乘车人添加成功'
       });
       getPassengerList({
-        page: pagination.current,
-        size: pagination.pageSize
+        page: pagination.value.current,
+        size: pagination.value.pageSize
       });
       open.value = false;
     } else {
@@ -27,7 +33,7 @@ const addPassenger = () => {
   });
 };
 
-const passenger = reactive({
+const passenger = ref({
   id: undefined,
   memberId: undefined,
   name: undefined,
@@ -87,11 +93,16 @@ const columns = ref([
     title: '购票人类型',
     dataIndex: 'type',
     key: 'type',
+  },
+  {
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation',
   }
 ]);
 
 // 分页的属性是固定的
-const pagination = reactive({
+const pagination = ref({
   total: 0,
   current: 1,
   pageSize: 2
@@ -103,7 +114,7 @@ const loading = ref(false);
 onMounted(() => {
   getPassengerList({
     page: 1,
-    size: pagination.pageSize
+    size: pagination.value.pageSize
   });
 });
 
@@ -111,7 +122,7 @@ const getPassengerList = (param) => {
   if (!param) {
     param = {
       page: 1,
-      size: pagination.pageSize
+      size: pagination.value.pageSize
     };
   }
   loading.value = true;
@@ -128,8 +139,8 @@ const getPassengerList = (param) => {
       // ... 用于展开数组和对象 eg: list.push(...data.content.list);
       passengers.value = data.content.list;
       // 设置分页控件的值
-      pagination.current = param.page;
-      pagination.total = data.content.total;
+      pagination.value.current = param.page;
+      pagination.value.total = data.content.total;
     } else {
       notification.error({
         message: data.message
@@ -140,10 +151,11 @@ const getPassengerList = (param) => {
 
 const handleTableChange = (pagination) => {
   getPassengerList({
-    page: pagination.current,
-    size: pagination.pageSize
+    page: pagination.value.current,
+    size: pagination.value.pageSize
   });
 };
+
 
 </script>
 
@@ -153,14 +165,18 @@ const handleTableChange = (pagination) => {
     <div id="button">
       <!--      防止组件贴在一起-->
       <a-space>
-        <a-button type="primary" @click="showModal">增加乘车人信息</a-button>
         <a-button type="primary" @click="getPassengerList(null)">刷新</a-button>
+        <a-button type="primary" @click="onAdd">增加乘车人信息</a-button>
       </a-space>
     </div>
 
-    <a-modal v-model:open="open" title="乘车人信息" @ok="addPassenger"
-             ok-text="确认" cancel-text="取消"
+    <a-modal v-model:open="open"
+             title="乘车人信息"
+             @ok="addPassenger"
+             ok-text="确认"
+             cancel-text="取消"
     >
+
       <a-form
           :model="passenger"
           name="basic"
@@ -203,7 +219,36 @@ const handleTableChange = (pagination) => {
            :columns="columns"
            :pagination="pagination"
            :loading="loading"
-           @change="handleTableChange"/>
+           @change="handleTableChange">
+
+    <!--
+      这里通过解构得到了对应的子组件列的信息和里面的数据信息，这样就指导点击的哪一列
+      eg:
+
+      column = {
+        title: '身份证',
+        dataIndex: 'idCard',
+        key: 'idCard',
+      }
+
+      record = {
+         "id": 1738430778796281856,
+         "memberId": 1738366392887021568,
+         "name": "test",
+         "idCard": "123321",
+         "type": "1",
+         "createTime": "2023-12-23 13:26:10",
+         "updateTime": "2023-12-23 13:26:10"
+      }
+    -->
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'operation'">
+        <a-space>
+          <a @click="onEdit(record)">编辑</a>
+        </a-space>
+      </template>
+    </template>
+  </a-table>
 
 </template>
 
