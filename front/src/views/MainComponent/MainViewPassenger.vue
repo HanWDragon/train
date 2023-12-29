@@ -14,6 +14,27 @@ const onEdit = (record) => {
   open.value = true;
 }
 
+const onDelete = (record) => {
+  axios.delete('/member/passenger/delete/' + record.id).then(
+      (response) => {
+        const data = response.data;
+        if (data.success) {
+          notification.success({
+            message: "删除成功"
+          })
+          getPassengerList({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          })
+        } else {
+          notification.error({
+            message: data.message
+          });
+        }
+      }
+  );
+}
+
 const addPassenger = () => {
   axios.post('/member/passenger/save', passenger.value).then((resp) => {
     let data = resp.data;
@@ -112,6 +133,22 @@ const pagination = ref({
 // 防止用户多次点击
 const loading = ref(false);
 
+const PASSENGER_TYPE_ARRAY = [
+  {
+    key: '1',
+    value: '成人'
+  },
+  {
+    key:'2',
+    value: '儿童'
+  },
+  {
+    key: '3',
+    value: '学生'
+  },
+
+]
+
 onMounted(() => {
   getPassengerList({
     page: 1,
@@ -207,9 +244,9 @@ const handleTableChange = (pagination) => {
                      :rules="[{ required: true, message: '乘客类型不能为空!' }]"
         >
           <a-select v-model:value="passenger.type" placeholder="请选择乘客类型">
-            <a-select-option value="1">成人</a-select-option>
-            <a-select-option value="2">儿童</a-select-option>
-            <a-select-option value="3">学生</a-select-option>
+            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key" :value="item.key">
+              {{ item.value }}
+            </a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -246,6 +283,13 @@ const handleTableChange = (pagination) => {
       <template v-if="column.dataIndex === 'operation'">
         <a-space>
           <a @click="onEdit(record)">编辑</a>
+          <a-divider type="vertical"/>
+          <a-popconfirm
+              title="删除后不可恢复，确认删除?"
+              @confirm="onDelete(record)"
+              ok-text="确认" cancel-text="取消">
+            <a style="color: red">删除</a>
+          </a-popconfirm>
         </a-space>
       </template>
     </template>
