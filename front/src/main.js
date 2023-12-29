@@ -11,6 +11,8 @@ import 'ant-design-vue/dist/reset.css';
 // 引入Axios
 import axios from "axios";
 
+import './assets/js/enums';
+
 const app = createApp(App)
 app.use(Antd).use(store).use(router).mount('#app')
 

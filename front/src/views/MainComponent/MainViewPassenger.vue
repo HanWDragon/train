@@ -133,21 +133,7 @@ const pagination = ref({
 // 防止用户多次点击
 const loading = ref(false);
 
-const PASSENGER_TYPE_ARRAY = [
-  {
-    key: '1',
-    value: '成人'
-  },
-  {
-    key: '2',
-    value: '儿童'
-  },
-  {
-    key: '3',
-    value: '学生'
-  },
-
-]
+const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
 
 onMounted(() => {
   getPassengerList({
