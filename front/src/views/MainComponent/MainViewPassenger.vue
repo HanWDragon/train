@@ -139,7 +139,7 @@ const PASSENGER_TYPE_ARRAY = [
     value: '成人'
   },
   {
-    key:'2',
+    key: '2',
     value: '儿童'
   },
   {
@@ -292,7 +292,17 @@ const handleTableChange = (pagination) => {
           </a-popconfirm>
         </a-space>
       </template>
+
+      <!--      这里设置对应的列的数据-->
+      <template v-else-if="column.dataIndex === 'type'">
+        <span v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key">
+          <span v-if="item.key === record.type">
+            {{ item.value }}
+          </span>
+        </span>
+      </template>
     </template>
+
   </a-table>
 
 </template>
