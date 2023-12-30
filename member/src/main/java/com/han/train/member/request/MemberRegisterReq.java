@@ -1,4 +1,4 @@
-package com.han.train.member.requset;
+package com.han.train.member.request;
 
 import jakarta.validation.constraints.NotBlank;
 

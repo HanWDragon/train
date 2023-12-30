@@ -18,6 +18,18 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
+
         <!--        模版引擎依赖-->
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -25,7 +37,7 @@
         </dependency>
 
 
-<!--        读写xml需要的依赖-->
+        <!--        读写xml需要的依赖-->
         <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
         <dependency>
             <groupId>org.dom4j</groupId>
@@ -55,7 +67,7 @@
 
                 <configuration>
                     <configurationFile>src/main/resources/generator-config-member.xml</configurationFile>
-<!--                    <configurationFile>src/main/resources/generator-config-business.xml</configurationFile>-->
+                    <!--                    <configurationFile>src/main/resources/generator-config-business.xml</configurationFile>-->
                     <!--<configurationFile>src/main/resources/generator-config-batch.xml</configurationFile>-->
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>

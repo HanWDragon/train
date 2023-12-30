@@ -1,9 +1,9 @@
 package com.han.train.member.controller;
 
 import com.han.train.common.response.CommonResp;
-import com.han.train.member.requset.MemberLoginReq;
-import com.han.train.member.requset.MemberRegisterReq;
-import com.han.train.member.requset.MemberSendCodeReq;
+import com.han.train.member.request.MemberLoginReq;
+import com.han.train.member.request.MemberRegisterReq;
+import com.han.train.member.request.MemberSendCodeReq;
 import com.han.train.member.response.MemberLoginResp;
 import com.han.train.member.service.MemberService;
 import jakarta.annotation.Resource;
