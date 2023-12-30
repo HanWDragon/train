@@ -1,4 +1,4 @@
-package com.han.train.${module}.req;
+package com.han.train.${module}.request;
 
 <#list typeSet as type>
 <#if type=='Date'>

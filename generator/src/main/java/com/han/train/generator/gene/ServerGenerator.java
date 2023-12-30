@@ -16,7 +16,7 @@ import java.util.*;
 
 public class ServerGenerator {
     static boolean readOnly = false;
-    static String vuePath = "admin/src/views/main/";
+    static String vuePath = "front/src/views/MainComponent";
     static String serverPath = "[module]/src/main/java/com/han/train/[module]/";
     static String pomPath = "generator/pom.xml";
     static String module = "";
@@ -77,13 +77,13 @@ public class ServerGenerator {
         param.put("readOnly", readOnly);
         System.out.println("组装参数：" + JSONUtil.toJsonPrettyStr(param));
 
-        gen(Domain, param, "service", "service");
-        gen(Domain, param, "controller", "controller");
-//        gen(Domain, param, "req", "saveReq");
-//        gen(Domain, param, "req", "queryReq");
-//        gen(Domain, param, "resp", "queryResp");
+//        gen(Domain, param, "service", "service");
+//        gen(Domain, param, "controller", "controller");
+        gen(Domain, param, "request", "saveReq");
+//        gen(Domain, param, "request", "queryReq");
+//        gen(Domain, param, "response", "queryResp");
 
-        genVue(do_main, param);
+//        genVue(do_main, param);
     }
 
     private static void gen(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
