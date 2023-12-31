@@ -75,7 +75,7 @@ import {notification} from "ant-design-vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: "${do_main}-view",
+  name: "${Domain}View",
   setup() {
     <#list fieldList as field>
     <#if field.enums>
@@ -129,13 +129,13 @@ export default defineComponent({
       axios.delete("/${module}/admin/${do_main}/delete/" + record.id).then((response) => {
         const data = response.data;
         if (data.success) {
-          notification.success({description: "删除成功！"});
+          notification.success({message: "删除成功！"});
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize,
           });
         } else {
-          notification.error({description: data.message});
+          notification.error({message: data.message});
         }
       });
     };
@@ -144,14 +144,14 @@ export default defineComponent({
       axios.post("/${module}/admin/${do_main}/save", ${domain}.value).then((response) => {
         let data = response.data;
         if (data.success) {
-          notification.success({description: "保存成功！"});
+          notification.success({message: "保存成功！"});
           visible.value = false;
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize
           });
         } else {
-          notification.error({description: data.message});
+          notification.error({message: data.message});
         }
       });
     };
@@ -179,7 +179,7 @@ export default defineComponent({
           pagination.value.current = param.page;
           pagination.value.total = data.content.total;
         } else {
-          notification.error({description: data.message});
+          notification.error({message: data.message});
         }
       });
     };

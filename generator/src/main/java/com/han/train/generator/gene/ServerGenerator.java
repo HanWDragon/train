@@ -16,7 +16,9 @@ import java.util.*;
 
 public class ServerGenerator {
     static boolean readOnly = false;
-    static String vuePath = "front/src/views/MainComponent";
+
+//  这个根据自己的需求来写，member但是会员端，admin是管理员端
+    static String vuePath = "front-member/src/views/MainComponent";
     static String serverPath = "[module]/src/main/java/com/han/train/[module]/";
     static String pomPath = "generator/pom.xml";
     static String module = "";
@@ -79,11 +81,11 @@ public class ServerGenerator {
 
 //        gen(Domain, param, "service", "service");
 //        gen(Domain, param, "controller", "controller");
-        gen(Domain, param, "request", "saveReq");
+//        gen(Domain, param, "request", "saveReq");
 //        gen(Domain, param, "request", "queryReq");
 //        gen(Domain, param, "response", "queryResp");
 
-//        genVue(do_main, param);
+        genVue(Domain, param);
     }
 
     private static void gen(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
@@ -96,10 +98,10 @@ public class ServerGenerator {
         FreemarkerUtil.generator(fileName, param);
     }
 
-    private static void genVue(String do_main, Map<String, Object> param) throws IOException, TemplateException {
+    private static void genVue(String Domain, Map<String, Object> param) throws IOException, TemplateException {
         FreemarkerUtil.initConfig("vue.ftl");
         new File(vuePath + module).mkdirs();
-        String fileName = vuePath + module + "/" + do_main + ".vue";
+        String fileName = vuePath + module + "/" + Domain + ".vue";
         System.out.println("开始生成：" + fileName);
         FreemarkerUtil.generator(fileName, param);
     }
