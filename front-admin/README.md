@@ -1,4 +1,4 @@
-# front-member
+# front-admin
 
 ## Project setup
 ```
