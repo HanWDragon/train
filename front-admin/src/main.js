@@ -5,7 +5,7 @@ import store from './store'
 import * as Icons from '@ant-design/icons-vue'
 
 // 引入Ant Design
-import Antd, {notification} from 'ant-design-vue';
+import Antd, from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 
 // 引入Axios
@@ -27,12 +27,6 @@ for (let iconsKey in icons) {
  */
 axios.interceptors.request.use(function (config) {
     console.log('请求参数：', config);
-    const _token = store.state.member.token;
-    if (_token) {
-        config.headers.token = _token;
-        console.log("为请求头添加token:", _token);
-
-    }
     return config;
 }, error => {
     return Promise.reject(error);
@@ -42,16 +36,6 @@ axios.interceptors.response.use(function (response) {
     return response;
 }, error => {
     console.log('返回错误：', error);
-    const status = error.response.status;
-    if (status === 401) {
-        console.log("未登录或者登录超时，跳到登录页面");
-        // 将前端的会员信息设置为空，防止空指针异常
-        store.commit("setMember", {});
-        notification.error({
-            message: "未登录或者登录超时"
-        });
-        router.push("/login");
-    }
     return Promise.reject(error);
 });
 

@@ -2,11 +2,8 @@
   <a-layout-header class="header">
     <div class="logo"/>
     <div style="float: right; color: white">
-      你好：{{ member.mobile }}
+      你好欢迎使用管理员页面
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <router-link to="/login" style="color: deepskyblue">
-        退出登录
-      </router-link>
     </div>
     <a-menu
         v-model:selectedKeys="selectedKeys"
@@ -19,9 +16,9 @@
           <CoffeeOutlined/>&nbsp; 欢迎
         </router-link>
       </a-menu-item>
-      <a-menu-item key="/passenger">
-        <router-link to="/passenger">
-          <UserOutlined/>&nbsp; 乘车人管理
+      <a-menu-item key="/about">
+        <router-link to="/about">
+          <UserOutlined/>&nbsp; 关于
         </router-link>
       </a-menu-item>
       <a-menu-item key="3">nav 3</a-menu-item>
@@ -43,18 +40,16 @@ export default defineComponent({
   },
   setup() {
     const selectedKeys = ref(['/welcome']);
-    let member = store.state.member;
 
-    watch(() => router.currentRoute.value.path ,(newValue)=> {
-      console.log('watch', newValue);
-      selectedKeys.value = [];
-      selectedKeys.value.push(newValue);
-    },
+    watch(() => router.currentRoute.value.path, (newValue) => {
+          console.log('watch', newValue);
+          selectedKeys.value = [];
+          selectedKeys.value.push(newValue);
+        },
         // 这个是组件创建完成是否后立即执行
         {immediate: false})
     return {
       selectedKeys,
-      member
     };
   },
 });
