@@ -80,7 +80,7 @@ public class ServerGenerator {
         System.out.println("组装参数：" + JSONUtil.toJsonPrettyStr(param));
 
         gen(Domain, param, "service", "service");
-        gen(Domain, param, "controller", "adminController");
+        gen(Domain, param, "controller/admin", "adminController");
         gen(Domain, param, "request", "saveReq");
         gen(Domain, param, "request", "queryReq");
         gen(Domain, param, "response", "queryResp");

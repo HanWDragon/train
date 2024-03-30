@@ -1,11 +1,11 @@
 package com.han.train.${module}.controller.admin;
 
 import com.han.train.common.context.LoginMemberContext;
-import com.han.train.common.resp.CommonResp;
-import com.han.train.common.resp.PageResp;
-import com.han.train.${module}.req.${Domain}QueryReq;
-import com.han.train.${module}.req.${Domain}SaveReq;
-import com.han.train.${module}.resp.${Domain}QueryResp;
+import com.han.train.common.response.CommonResp;
+import com.han.train.common.response.PageResp;
+import com.han.train.${module}.request.${Domain}QueryReq;
+import com.han.train.${module}.request.${Domain}SaveReq;
+import com.han.train.${module}.response.${Domain}QueryResp;
 import com.han.train.${module}.service.${Domain}Service;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
