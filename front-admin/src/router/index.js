@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {notification} from "ant-design-vue";
-import store from "@/store";
+
 
 const routes = [
     {
@@ -35,5 +34,7 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
+
+export default router
 
 

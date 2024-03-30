@@ -11,6 +11,7 @@ import 'ant-design-vue/dist/reset.css';
 // 引入Axios
 import axios from "axios";
 
+// 引入对应的枚举文件
 import './assets/js/enums';
 
 const app = createApp(App)

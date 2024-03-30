@@ -5,7 +5,7 @@ import store from './store'
 import * as Icons from '@ant-design/icons-vue'
 
 // 引入Ant Design
-import Antd, from 'ant-design-vue';
+import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 
 // 引入Axios

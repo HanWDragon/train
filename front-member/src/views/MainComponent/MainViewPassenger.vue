@@ -230,8 +230,8 @@ const handleTableChange = (pagination) => {
                      :rules="[{ required: true, message: '乘客类型不能为空!' }]"
         >
           <a-select v-model:value="passenger.type" placeholder="请选择乘客类型">
-            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.key" :value="item.key">
-              {{ item.value }}
+            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
+              {{ item.desc }}
             </a-select-option>
           </a-select>
         </a-form-item>

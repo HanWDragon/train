@@ -1,6 +1,10 @@
 <template xmlns:color="http://www.w3.org/1999/xhtml">
   <a-layout-header class="header">
-    <div class="logo"/>
+    <div class="logo">
+      <router-link to="/welcome">
+        12306
+      </router-link>
+    </div>
     <div style="float: right; color: white">
       你好：{{ member.mobile }}
       &nbsp;&nbsp;&nbsp;&nbsp;
