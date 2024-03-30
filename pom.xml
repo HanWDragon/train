@@ -15,13 +15,11 @@
     <name>train</name>
     <description>train</description>
     <modules>
-        <module>member</module>
         <module>common</module>
         <module>gateway</module>
+        <module>member</module>
+        <module>business</module>
         <module>generator</module>
-        <module>business</module>
-        <module>business</module>
-        <module>business</module>
     </modules>
     <properties>
         <java.version>17</java.version>
