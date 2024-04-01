@@ -25,6 +25,10 @@ const routes = [
             {
                 path: 'station',
                 component: () => import('../views/MainComponent/Station.vue')
+            },
+            {
+                path: 'train',
+                component: () => import('../views/MainComponent/Train.vue')
             }
         ]
     },

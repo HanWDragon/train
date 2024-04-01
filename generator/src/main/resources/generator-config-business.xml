@@ -43,7 +43,8 @@
 
 <!--        要生成那张表，以及对应实体名-->
 <!--        <table tableName="member" domainObjectName="Member"/>-->
-        <table tableName="station" domainObjectName="Station"/>
+<!--        <table tableName="station" domainObjectName="Station"/>-->
+        <table tableName="train" domainObjectName="Train"/>
 <!--        <table tableName="ticket" domainObjectName="Ticket"/>-->
     </context>
 </generatorConfiguration>
