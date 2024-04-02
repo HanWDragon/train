@@ -223,7 +223,20 @@ export default defineComponent({
         page: 1,
         size: pagination.value.pageSize
       });
+      queryTrainCode()
     });
+
+    const queryTrainCode = () => {
+      axios.get("/business/admin/train/query-all",).then((response) => {
+        loading.value = false;
+        let data = response.data;
+        if (data.success) {
+          console.log(data.content)
+        } else {
+          notification.error({message: data.message});
+        }
+      })
+    }
 
     return {
       trainStation,
