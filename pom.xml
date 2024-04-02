@@ -20,6 +20,7 @@
         <module>member</module>
         <module>business</module>
         <module>generator</module>
+        <module>batch</module>
     </modules>
     <properties>
         <java.version>17</java.version>

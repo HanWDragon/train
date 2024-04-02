@@ -14,6 +14,11 @@ spring:
           predicates:
             - Path=/business/**
           uri: http://127.0.0.1:8002
+        ### 路由转发，将/batch/...的请求转发到batch模块
+        - id: business
+          predicates:
+            - Path=/batch/**
+          uri: http://127.0.0.1:8003
 
       globalcors:
         cors-configurations:
