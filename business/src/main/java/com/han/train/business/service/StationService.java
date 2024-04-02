@@ -1,6 +1,7 @@
 package com.han.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
@@ -36,8 +37,8 @@ public class StationService {
         if (ObjectUtil.isNull(station.getId())) {
 
             // 保存之前，先校验唯一键是否存在
-            int res = selectByUnique(req.getName());
-            if (res != 0) {
+            Station stationDB = selectByUnique(req.getName());
+            if (ObjectUtil.isNotEmpty(stationDB)) {
                 throw new BusinessException(BusinessExceptionEnum.BUSINESS_STATION_NAME_UNIQUE_ERROR);
             }
 
@@ -51,10 +52,15 @@ public class StationService {
         }
     }
 
-    private int selectByUnique(String name) {
+    private Station selectByUnique(String name) {
         StationExample stationExample = new StationExample();
         stationExample.createCriteria().andNameEqualTo(name);
-        return stationMapper.selectByExample(stationExample).size();
+        List<Station> list = stationMapper.selectByExample(stationExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.getFirst();
+        } else {
+            return null;
+        }
     }
 
     public PageResp<StationQueryResp> queryList(StationQueryReq req) {
