@@ -28,11 +28,7 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
       <a-form-item label="车次编号">
-        <a-select v-model:value(v-model)="trainStation.trainCode" show-search :filter-option="filterTrainCodeOption">
-          <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end">
-            {{ item.code }}|{{ item.start }} ~ {{ item.end }}
-          </a-select-option>
-        </a-select>
+        <train-select-vue v-model="trainStation.trainCode" :width="'100%'"></train-select-vue>
       </a-form-item>
       <a-form-item label="站序">
         <a-input v-model:value="trainStation.index"/>
@@ -60,12 +56,16 @@
 </template>
 
 <script>
+import TrainSelectVue from "@/components/TrainSelect.vue";
 import {defineComponent, onMounted, ref, watch} from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 import {pinyin} from "pinyin-pro";
 
 export default defineComponent({
+  components: {
+    TrainSelectVue
+  },
   setup() {
     const visible = ref(false);
     let trainStation = ref({
@@ -227,29 +227,9 @@ export default defineComponent({
         page: 1,
         size: pagination.value.pageSize
       });
-      queryTrainCode()
     });
 
-    // ----------- 车次下拉框 --------------
-    const trains = ref([]);
 
-    const queryTrainCode = () => {
-      axios.get("/business/admin/train/query-all",).then((response) => {
-        loading.value = false;
-        let data = response.data;
-        if (data.success) {
-          trains.value = data.content
-        } else {
-          notification.error({message: data.message});
-        }
-      })
-    }
-
-
-    const filterTrainCodeOption = (input, option) => {
-      console.log(input, option);
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    };
 
     return {
       trainStation,
@@ -264,8 +244,6 @@ export default defineComponent({
       handleOk,
       onEdit,
       onDelete,
-      trains,
-      filterTrainCodeOption
     };
   },
   name: "TrainStationView",
