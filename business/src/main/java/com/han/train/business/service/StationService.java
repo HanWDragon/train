@@ -11,6 +11,8 @@ import com.han.train.business.mapper.StationMapper;
 import com.han.train.business.request.StationQueryReq;
 import com.han.train.business.request.StationSaveReq;
 import com.han.train.business.response.StationQueryResp;
+import com.han.train.common.exception.BusinessException;
+import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.common.response.PageResp;
 import com.han.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
@@ -32,6 +34,13 @@ public class StationService {
         DateTime now = DateTime.now();
         Station station = BeanUtil.copyProperties(req, Station.class);
         if (ObjectUtil.isNull(station.getId())) {
+
+            // 保存之前，先校验唯一键是否存在
+            int res = selectByUnique(req.getName());
+            if (res != 0) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_STATION_NAME_UNIQUE_ERROR);
+            }
+
             station.setId(SnowUtil.getSnowflakeNextId());
             station.setCreateTime(now);
             station.setUpdateTime(now);
@@ -40,6 +49,12 @@ public class StationService {
             station.setUpdateTime(now);
             stationMapper.updateByPrimaryKey(station);
         }
+    }
+
+    private int selectByUnique(String name) {
+        StationExample stationExample = new StationExample();
+        stationExample.createCriteria().andNameEqualTo(name);
+        return stationMapper.selectByExample(stationExample).size();
     }
 
     public PageResp<StationQueryResp> queryList(StationQueryReq req) {
