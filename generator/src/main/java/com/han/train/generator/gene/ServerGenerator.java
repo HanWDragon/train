@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class ServerGenerator {
-    static boolean readOnly = false;
+//    static boolean readOnly = false;
+    static boolean readOnly = true;
 
 //  这个根据自己的需求来写，member但是会员端，admin是管理员端
     static String vuePath = "front-admin/src/views/MainComponent";
@@ -79,11 +80,11 @@ public class ServerGenerator {
         param.put("readOnly", readOnly);
         System.out.println("组装参数：" + JSONUtil.toJsonPrettyStr(param));
 
-        gen(Domain, param, "service", "service");
-        gen(Domain, param, "controller/admin", "adminController");
-        gen(Domain, param, "request", "saveReq");
-        gen(Domain, param, "request", "queryReq");
-        gen(Domain, param, "response", "queryResp");
+//        gen(Domain, param, "service", "service");
+//        gen(Domain, param, "controller/admin", "adminController");
+//        gen(Domain, param, "request", "saveReq");
+//        gen(Domain, param, "request", "queryReq");
+//        gen(Domain, param, "response", "queryResp");
 
         genVue(Domain, param);
     }
