@@ -15,6 +15,11 @@
           <UserOutlined/>&nbsp; 关于
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/batch_job">
+        <router-link to="/batch_job">
+          <MenuUnfoldOutlined /> &nbsp; 任务管理
+        </router-link>
+      </a-menu-item>
       <a-menu-item key="/station">
         <router-link to="/station">
           <UserOutlined/>&nbsp; 车站管理
