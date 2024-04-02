@@ -44,7 +44,9 @@
 <!--        要生成那张表，以及对应实体名-->
 <!--        <table tableName="member" domainObjectName="Member"/>-->
 <!--        <table tableName="station" domainObjectName="Station"/>-->
-        <table tableName="train" domainObjectName="Train"/>
+<!--        <table tableName="train" domainObjectName="Train"/>-->
+<!--        <table tableName="train_station" domainObjectName="TrainStation"/>-->
+        <table tableName="train_carriage" domainObjectName="TrainCarriage"/>
 <!--        <table tableName="ticket" domainObjectName="Ticket"/>-->
     </context>
 </generatorConfiguration>

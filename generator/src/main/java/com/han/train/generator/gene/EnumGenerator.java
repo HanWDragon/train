@@ -2,6 +2,7 @@ package com.han.train.generator.gene;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.han.train.business.enums.SeatTypeEnum;
 import com.han.train.business.enums.TrainTypeEnum;
 import com.han.train.member.enums.PassengerTypeEnum;
 
@@ -26,9 +27,13 @@ public class EnumGenerator {
         try {
             bufferObject.append("window.");
             bufferArray.append("window.");
-//            toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
+            toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
+            bufferObject.append("window.");
+            bufferArray.append("window.");
             toJson(TrainTypeEnum.class, bufferObject, bufferArray);
-//            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
+            bufferObject.append("window.");
+            bufferArray.append("window.");
+            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
 //            toJson(SeatColEnum.class, bufferObject, bufferArray);
 //            toJson(ConfirmOrderStatusEnum.class, bufferObject, bufferArray);
 
