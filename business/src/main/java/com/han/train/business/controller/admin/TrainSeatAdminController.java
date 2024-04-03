@@ -1,12 +1,11 @@
 package com.han.train.business.controller.admin;
 
-import com.han.train.common.context.LoginMemberContext;
-import com.han.train.common.response.CommonResp;
-import com.han.train.common.response.PageResp;
 import com.han.train.business.request.TrainSeatQueryReq;
 import com.han.train.business.request.TrainSeatSaveReq;
 import com.han.train.business.response.TrainSeatQueryResp;
 import com.han.train.business.service.TrainSeatService;
+import com.han.train.common.response.CommonResp;
+import com.han.train.common.response.PageResp;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

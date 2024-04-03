@@ -1,25 +1,25 @@
 <template>
   <p>
     <a-space>
-      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
+      <a-date-picker v-model:value="params.date" placeholder="请选择日期" valueFormat="YYYY-MM-DD"/>
       <train-select-view v-model="params.code" width="200px"></train-select-view>
-      <a-button type="primary" @click="handleQuery()">刷新 \ 按条件搜索</a-button>
+      <a-button type="primary" @click="handleQuery()">刷新\按条件搜索</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
-      <a-button type="danger" @click="onClickGenDaily">手动生成车次信息</a-button>
+      <a-button type="primary" @click="onClickGenDaily">手动生成车次信息</a-button>
     </a-space>
   </p>
-  <a-table :dataSource="dailyTrains"
-           :columns="columns"
+  <a-table :columns="columns"
+           :dataSource="dailyTrains"
+           :loading="loading"
            :pagination="pagination"
-           @change="handleTableChange"
-           :loading="loading">
+           @change="handleTableChange">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'operation'">
         <a-space>
           <a-popconfirm
-              title="删除后不可恢复，确认删除?"
-              @confirm="onDelete(record)"
-              ok-text="确认" cancel-text="取消">
+              cancel-text="取消"
+              ok-text="确认"
+              title="删除后不可恢复，确认删除?" @confirm="onDelete(record)">
             <a style="color: red">删除</a>
           </a-popconfirm>
           <a @click="onEdit(record)">编辑</a>
@@ -34,11 +34,11 @@
       </template>
     </template>
   </a-table>
-  <a-modal v-model:visible="visible" title="每日车次" @ok="handleOk"
-           ok-text="确认" cancel-text="取消">
-    <a-form :model="dailyTrain" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+  <a-modal v-model:visible="visible" cancel-text="取消" ok-text="确认"
+           title="每日车次" @ok="handleOk">
+    <a-form :label-col="{span: 4}" :model="dailyTrain" :wrapper-col="{ span: 20 }">
       <a-form-item label="日期">
-        <a-date-picker v-model:value="dailyTrain.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"/>
+        <a-date-picker v-model:value="dailyTrain.date" placeholder="请选择日期" valueFormat="YYYY-MM-DD"/>
       </a-form-item>
       <a-form-item label="车次编号">
         <train-select-view v-model="dailyTrain.code" @change="onChangeCode"></train-select-view>
@@ -57,7 +57,7 @@
         <a-input v-model:value="dailyTrain.startPinyin"/>
       </a-form-item>
       <a-form-item label="出发时间">
-        <a-time-picker v-model:value="dailyTrain.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
+        <a-time-picker v-model:value="dailyTrain.startTime" placeholder="请选择时间" valueFormat="HH:mm:ss"/>
       </a-form-item>
       <a-form-item label="终点站">
         <a-input v-model:value="dailyTrain.end"/>
@@ -66,13 +66,13 @@
         <a-input v-model:value="dailyTrain.endPinyin"/>
       </a-form-item>
       <a-form-item label="到站时间">
-        <a-time-picker v-model:value="dailyTrain.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间"/>
+        <a-time-picker v-model:value="dailyTrain.endTime" placeholder="请选择时间" valueFormat="HH:mm:ss"/>
       </a-form-item>
     </a-form>
   </a-modal>
-  <a-modal v-model:visible="genDailyVisible" title="生成车次" @ok="handleGenDailyOk"
-           :confirm-loading="genDailyLoading" ok-text="确认" cancel-text="取消">
-    <a-form :model="genDaily" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+  <a-modal v-model:visible="genDailyVisible" :confirm-loading="genDailyLoading" cancel-text="取消"
+           ok-text="确认" title="生成车次" @ok="handleGenDailyOk">
+    <a-form :label-col="{span: 4}" :model="genDaily" :wrapper-col="{ span: 20 }">
       <a-form-item label="日期">
         <a-date-picker v-model:value="genDaily.date" placeholder="请选择日期"/>
       </a-form-item>

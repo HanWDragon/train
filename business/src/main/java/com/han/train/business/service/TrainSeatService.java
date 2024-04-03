@@ -80,7 +80,7 @@ public class TrainSeatService {
     }
 
 
-// 批量生成一定要考虑一个问题，是否支持重复生成
+    // 批量生成一定要考虑一个问题，是否支持重复生成
 //    1、存在就跳过 2、直接覆盖或者删光再插入
 //    对于批量插入一定要事务
     @Transactional
@@ -126,5 +126,13 @@ public class TrainSeatService {
                 }
             }
         }
+    }
+
+    public List<TrainSeat> selectByTrainCode(String trainCode) {
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.setOrderByClause("`id` asc");
+        TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
+        criteria.andTrainCodeEqualTo(trainCode);
+        return trainSeatMapper.selectByExample(trainSeatExample);
     }
 }
