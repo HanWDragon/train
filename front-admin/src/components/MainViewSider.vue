@@ -2,7 +2,7 @@
   <a-layout-sider width="200" style="background: #fff">
     <a-menu
         v-model:selectedKeys="selectedKeys"
-        :open-keys="['base','batch']"
+        :open-keys="['base','batch','business']"
         mode="inline"
         :style="{ height: '100%', borderRight: 0 }"
     >
@@ -11,6 +11,19 @@
           <CoffeeOutlined/>&nbsp; 欢迎
         </router-link>
       </a-menu-item>
+      <a-sub-menu key="business">
+        <template #title>
+          <span>
+            <UnorderedListOutlined/>
+            业务管理
+          </span>
+        </template>
+        <a-menu-item key="/business/daily-train">
+          <router-link to="/business/daily-train">
+            <MenuUnfoldOutlined/> &nbsp; 火车管理
+          </router-link>
+        </a-menu-item>
+      </a-sub-menu>
       <a-sub-menu key="base">
         <template #title>
           <span>
