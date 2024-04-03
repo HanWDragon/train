@@ -23,30 +23,40 @@ const routes = [
                 component: () => import('../views/MainComponent/MainViewAbout.vue')
             },
             {
-                path: 'station',
-                component: () => import('../views/MainComponent/Station.vue')
+                path: 'base/',
+                children: [
+                    {
+                        path: 'station',
+                        component: () => import('../views/MainComponent/Station.vue')
+                    },
+                    {
+                        path: 'train',
+                        component: () => import('../views/MainComponent/Train.vue')
+                    },
+                    {
+                        path: 'train-station',
+                        component: () => import('../views/MainComponent/TrainStation.vue')
+                    },
+                    {
+                        path: 'train-carriage',
+                        component: () => import('../views/MainComponent/TrainCarriage.vue')
+                    },
+                    {
+                        path: 'train-seat',
+                        component: () => import('../views/MainComponent/TrainSeat.vue')
+                    },
+                ]
             },
             {
-                path: 'train',
-                component: () => import('../views/MainComponent/Train.vue')
+                path: 'batch/',
+                children: [
+                    {
+                        path: 'job',
+                        name: 'job',
+                        component: () => import('../views/MainComponent/Job.vue')
+                    }
+                ]
             },
-            {
-                path: 'train-station',
-                component: () => import('../views/MainComponent/TrainStation.vue')
-            },
-            {
-                path: 'train_carriage',
-                component: () => import('../views/MainComponent/TrainCarriage.vue')
-            },
-            {
-                path: 'train_seat',
-                component: () => import('../views/MainComponent/TrainSeat.vue')
-            },
-            {
-                path: 'batch_job',
-                name: 'batch_job',
-                component: () => import('../views/MainComponent/Job.vue')
-            }
         ]
     },
     {
