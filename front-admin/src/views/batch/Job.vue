@@ -20,7 +20,7 @@
                 cancel-text="否"
                 @confirm="handleRun(record)"
             >
-              <a-button type="primary" size="small">
+              <a-button danger size="small">
                 手动执行
               </a-button>
             </a-popconfirm>
@@ -53,7 +53,7 @@
                 cancel-text="否"
                 @confirm="handleDelete(record)"
             >
-              <a-button type="danger" size="small">
+              <a-button danger size="small">
                 删除
               </a-button>
             </a-popconfirm>
