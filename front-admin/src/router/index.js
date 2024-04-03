@@ -8,7 +8,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import('../views/MainComponent/MainView.vue'),
+        component: () => import('@/views/main/MainView.vue'),
 
         children: [
             {
@@ -16,34 +16,34 @@ const routes = [
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
-                component: () => import('../views/MainComponent/MainViewWelcome.vue')
+                component: () => import('@/views/main/MainViewWelcome.vue')
             },
             {
                 path: 'about',
-                component: () => import('../views/MainComponent/MainViewAbout.vue')
+                component: () => import('@/views/main/MainViewAbout.vue')
             },
             {
                 path: 'base/',
                 children: [
                     {
                         path: 'station',
-                        component: () => import('../views/MainComponent/Station.vue')
+                        component: () => import('../views/base/Station.vue')
                     },
                     {
                         path: 'train',
-                        component: () => import('../views/MainComponent/Train.vue')
+                        component: () => import('../views/base/Train.vue')
                     },
                     {
                         path: 'train-station',
-                        component: () => import('../views/MainComponent/TrainStation.vue')
+                        component: () => import('../views/base/TrainStation.vue')
                     },
                     {
                         path: 'train-carriage',
-                        component: () => import('../views/MainComponent/TrainCarriage.vue')
+                        component: () => import('../views/base/TrainCarriage.vue')
                     },
                     {
                         path: 'train-seat',
-                        component: () => import('../views/MainComponent/TrainSeat.vue')
+                        component: () => import('../views/base/TrainSeat.vue')
                     },
                 ]
             },
@@ -53,7 +53,7 @@ const routes = [
                     {
                         path: 'job',
                         name: 'job',
-                        component: () => import('../views/MainComponent/Job.vue')
+                        component: () => import('../views/batch/Job.vue')
                     }
                 ]
             },
