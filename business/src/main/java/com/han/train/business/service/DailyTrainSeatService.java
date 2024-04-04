@@ -124,6 +124,7 @@ public class DailyTrainSeatService {
         return countSeat(date, trainCode, null);
     }
 
+    // 比如返回-1就是没有这种类型的票，返回0就是卖光了
     public int countSeat(Date date, String trainCode, String seatType) {
         DailyTrainSeatExample example = new DailyTrainSeatExample();
         DailyTrainSeatExample.Criteria criteria = example.createCriteria();
