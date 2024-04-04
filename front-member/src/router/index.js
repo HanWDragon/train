@@ -9,7 +9,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import('../views/LoginView.vue')
+        component: () => import('../views/main/LoginView.vue')
     },
     {
         path: '/',
@@ -17,7 +17,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import('../views/MainView.vue'),
+        component: () => import('../views/main/MainView.vue'),
 
         // 添加元数据，在前端进行拦截，而axios是基于后端返回的信息进行验证
         meta: {
@@ -29,11 +29,11 @@ const routes = [
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
-                component: () => import('../views/MainComponent/MainViewWelcome.vue')
+                component: () => import('@/views/main/Welcome.vue')
             },
             {
                 path: 'passenger',
-                component: () => import('../views/MainComponent/MainViewPassenger.vue')
+                component: () => import('@/views/main/Passenger.vue')
             }
         ]
     },
