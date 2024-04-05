@@ -14,6 +14,7 @@
            @change="handleTableChange">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'operation'">
+        <a-button type="primary" @click="toOrder(record)">预定</a-button>
       </template>
       <template v-else-if="column.dataIndex === 'station'">
         {{ record.start }}<br/>
@@ -78,6 +79,7 @@ import {notification} from "ant-design-vue";
 import axios from "axios";
 import StationSelectView from "@/components/StationSelect.vue";
 import dayjs from "dayjs";
+import router from "@/router";
 
 export default defineComponent({
   name: "TicketView",
@@ -156,6 +158,10 @@ export default defineComponent({
         title: '硬卧',
         dataIndex: 'yw',
         key: 'yw',
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
       },
     ];
 
@@ -198,10 +204,16 @@ export default defineComponent({
           pagination.value.current = param.page;
           pagination.value.total = data.content.total;
         } else {
-          notification.error({description: data.message});
+          notification.error({message: data.message});
         }
       });
     };
+
+    const toOrder = (record) => {
+      dailyTrainTicket.value = Tool.copy(record)
+      SessionStorage.set('dailyTrainTicket', dailyTrainTicket.value);
+      router.push('/order')
+    }
 
     const handleTableChange = (page) => {
       // console.log("看看自带的分页参数都有啥：" + JSON.stringify(page));
@@ -230,7 +242,8 @@ export default defineComponent({
       handleQuery,
       loading,
       params,
-      calDuration
+      calDuration,
+      toOrder
     };
   },
 });
