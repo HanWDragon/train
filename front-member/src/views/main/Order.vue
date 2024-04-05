@@ -1,5 +1,5 @@
 <script>
-import {defineComponent, onMounted, ref} from 'vue'
+import {defineComponent, onMounted, ref, watch} from 'vue'
 import axios from "axios";
 import {notification} from "ant-design-vue";
 
@@ -10,6 +10,7 @@ export default defineComponent({
     const passengerOptions = ref([]);
     const passengerChecks = ref([]);
     const dailyTrainTicket = SessionStorage.get(SESSION_ORDER) || {};
+    const PASSENGER_TYPE_ARRAY = window.PASSENGER_TYPE_ARRAY;
     console.log('下单的次车次信息', dailyTrainTicket);
 
     const SEAT_TYPE = window.SEAT_TYPE;
@@ -37,6 +38,31 @@ export default defineComponent({
       }
     }
 
+    // 购票列表，用于界面展示，并传递到后端接口，用来描述：哪个乘客购买什么座位的票
+    // {
+    //   passengerId: 123,
+    //   passengerType: "1",
+    //   passengerName: "张三",
+    //   passengerIdCard: "12323132132",
+    //   seatTypeCode: "1",
+    //   seat: "C1"
+    // }
+    const tickets = ref([]);
+
+    // 勾选或去掉某个乘客时，在购票列表中加上或去掉一张表
+    watch(() => passengerChecks.value, (newVal, oldVal) => {
+      console.log("勾选乘客发生变化", newVal, oldVal)
+      // 每次有变化时，把购票列表清空，重新构造列表
+      tickets.value = [];
+      passengerChecks.value.forEach((item) => tickets.value.push({
+        passengerId: item.id,
+        passengerType: item.type,
+        seatTypeCode: seatTypes[0].code,
+        passengerName: item.name,
+        passengerIdCard: item.idCard
+      }))
+    }, {immediate: true});
+
     const handleQueryPassenger = () => {
       axios.get("/member/passenger/query-mine").then((response) => {
         let data = response.data;
@@ -62,7 +88,9 @@ export default defineComponent({
       seatTypes,
       passengers,
       passengerOptions,
-      passengerChecks
+      passengerChecks,
+      tickets,
+      PASSENGER_TYPE_ARRAY
     };
   }
 })
@@ -88,7 +116,35 @@ export default defineComponent({
     <b>勾选要购票的乘客：</b>&nbsp;
     <a-checkbox-group v-model:value="passengerChecks" :options="passengerOptions"/>
     <br/>
-    选中的乘客 :{{ passengerChecks }}
+    选中的乘客:{{ passengerChecks }}
+    <br/>
+    购票列表:{{ tickets }}
+    <div class="order-tickets">
+      <a-row class="order-tickets-header" v-if="tickets.length > 0">
+        <a-col :span="2">乘客</a-col>
+        <a-col :span="6">身份证</a-col>
+        <a-col :span="4">票种</a-col>
+        <a-col :span="4">座位类型</a-col>
+      </a-row>
+      <a-row class="order-tickets-row" v-for="ticket in tickets" :key="ticket.passengerId">
+        <a-col :span="2">{{ ticket.passengerName }}</a-col>
+        <a-col :span="6">{{ ticket.passengerIdCard }}</a-col>
+        <a-col :span="4">
+          <a-select v-model:value="ticket.passengerType" style="width: 100%">
+            <a-select-option v-for="item in PASSENGER_TYPE_ARRAY" :key="item.code" :value="item.code">
+              {{ item.desc }}
+            </a-select-option>
+          </a-select>
+        </a-col>
+        <a-col :span="4">
+          <a-select v-model:value="ticket.seatTypeCode" style="width: 100%">
+            <a-select-option v-for="item in seatTypes" :key="item.code" :value="item.code">
+              {{ item.desc }}
+            </a-select-option>
+          </a-select>
+        </a-col>
+      </a-row>
+    </div>
   </div>
 </template>
 
