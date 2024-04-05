@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class ServerGenerator {
-    static boolean readOnly = false;
-//    static boolean readOnly = true;
+    //    static boolean readOnly = false;
+    static boolean readOnly = true;
 
 //  这个根据自己的需求来写，member但是会员端，admin是管理员端
     static String vuePath = "front-admin/src/views/";

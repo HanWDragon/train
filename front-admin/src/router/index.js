@@ -65,6 +65,9 @@ const routes = [
                     }, {
                         path: 'daily-train-ticket',
                         component: () => import('../views/business/DailyTrainTicket.vue'),
+                    }, {
+                        path: 'confirm-order',
+                        component: () => import('../views/business/ConfirmOrder.vue'),
                     }
                 ]
             },
