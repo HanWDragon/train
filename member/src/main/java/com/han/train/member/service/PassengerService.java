@@ -6,6 +6,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.han.train.common.context.LoginMemberContext;
+import com.han.train.common.exception.BusinessException;
+import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.common.response.PageResp;
 import com.han.train.common.util.SnowUtil;
 import com.han.train.member.domain.Passenger;
@@ -13,7 +15,7 @@ import com.han.train.member.domain.PassengerExample;
 import com.han.train.member.mapper.PassengerMapper;
 import com.han.train.member.request.PassengerQueryReq;
 import com.han.train.member.request.PassengerSaveReq;
-import com.han.train.member.response.PassengerQuerryResp;
+import com.han.train.member.response.PassengerQueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,14 @@ public class PassengerService {
         DateTime time = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
         if (ObjectUtil.isNull(passenger.getId())) {
+//            如果此时我的乘车人>50,那么就会抛出异常，由于此时已经登陆那么前台就会有此时注册人的id，和member_id关联，可以使用这个来查询
+
+            PassengerExample passengerExample = new PassengerExample();
+            passengerExample.createCriteria().andMemberIdEqualTo(LoginMemberContext.getId());
+            int size = passengerMapper.selectByExample(passengerExample).size();
+            if (size >= 50) {
+                throw new BusinessException(BusinessExceptionEnum.MEMBER_PASSENGER_TOO_MORE);
+            }
             // 一般在service层都会重新赋值
             passenger.setId(SnowUtil.getSnowflakeNextId());
             passenger.setMemberId(LoginMemberContext.getId());
@@ -52,7 +62,7 @@ public class PassengerService {
 
     // service 层通常是要做的比较通用，controller比较细分，需要接口隔离
     // 返回的实体一般不实用domain包下的实体，而是自己创建一个方便修改
-    public PageResp<PassengerQuerryResp> queryList(PassengerQueryReq req) {
+    public PageResp<PassengerQueryResp> queryList(PassengerQueryReq req) {
         PassengerExample passengerExample = new PassengerExample();
         passengerExample.setOrderByClause("id desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
@@ -69,16 +79,28 @@ public class PassengerService {
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
 
-        List<PassengerQuerryResp> list = BeanUtil.copyToList(passengerList, PassengerQuerryResp.class);
+        List<PassengerQueryResp> list = BeanUtil.copyToList(passengerList, PassengerQueryResp.class);
 
-        PageResp<PassengerQuerryResp> pageResp = new PageResp<>();
+        PageResp<PassengerQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         passengerMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查询我的所有乘客
+     */
+    public List<PassengerQueryResp> queryMine() {
+        PassengerExample passengerExample = new PassengerExample();
+        passengerExample.setOrderByClause("name asc");
+        PassengerExample.Criteria criteria = passengerExample.createCriteria();
+        criteria.andMemberIdEqualTo(LoginMemberContext.getId());
+        List<Passenger> list = passengerMapper.selectByExample(passengerExample);
+        return BeanUtil.copyToList(list, PassengerQueryResp.class);
     }
 
 

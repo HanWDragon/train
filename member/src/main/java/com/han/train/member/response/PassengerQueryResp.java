@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.util.Date;
 
-public class PassengerQuerryResp {
+public class PassengerQueryResp {
     // 这个是单独配置，解决Long类型在前端精度丢失的问题
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
