@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnumGenerator {
-//     static String path = "front-member/src/assets/js/enums.js";
-    static String path = "front-admin/src/assets/js/enums.js";
+    static String path = "front-member/src/assets/js/enums.js";
+//    static String path = "front-admin/src/assets/js/enums.js";
 
     public static void main(String[] args) {
         StringBuffer bufferObject = new StringBuffer();
