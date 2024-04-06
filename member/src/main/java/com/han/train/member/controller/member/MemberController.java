@@ -1,4 +1,4 @@
-package com.han.train.member.controller;
+package com.han.train.member.controller.member;
 
 import com.han.train.common.response.CommonResp;
 import com.han.train.member.request.MemberLoginReq;

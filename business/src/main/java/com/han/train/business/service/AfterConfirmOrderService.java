@@ -3,10 +3,14 @@ package com.han.train.business.service;
 import com.han.train.business.domain.ConfirmOrder;
 import com.han.train.business.domain.DailyTrainSeat;
 import com.han.train.business.domain.DailyTrainTicket;
+import com.han.train.business.enums.ConfirmOrderStatusEnum;
+import com.han.train.business.feign.MemberFeign;
 import com.han.train.business.mapper.ConfirmOrderMapper;
 import com.han.train.business.mapper.DailyTrainSeatMapper;
 import com.han.train.business.mapper.customer.DailyTrainTicketCustomerMapper;
 import com.han.train.business.request.ConfirmOrderTicketReq;
+import com.han.train.common.request.MemberTicketReq;
+import com.han.train.common.response.CommonResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,9 @@ public class AfterConfirmOrderService {
 
     @Resource
     private DailyTrainTicketCustomerMapper dailyTrainTicketCustomerMapper;
+
+    @Resource
+    private MemberFeign memberFeign;
 
     /**
      * 选中座位后事务处理：
@@ -97,31 +104,31 @@ public class AfterConfirmOrderService {
                     maxStartIndex,
                     minEndIndex,
                     maxEndIndex);
-//
-//            // 调用会员服务接口，为会员增加一张车票
-//            MemberTicketReq memberTicketReq = new MemberTicketReq();
-//            memberTicketReq.setMemberId(confirmOrder.getMemberId());
-//            memberTicketReq.setPassengerId(tickets.get(j).getPassengerId());
-//            memberTicketReq.setPassengerName(tickets.get(j).getPassengerName());
-//            memberTicketReq.setTrainDate(dailyTrainTicket.getDate());
-//            memberTicketReq.setTrainCode(dailyTrainTicket.getTrainCode());
-//            memberTicketReq.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
-//            memberTicketReq.setSeatRow(dailyTrainSeat.getRow());
-//            memberTicketReq.setSeatCol(dailyTrainSeat.getCol());
-//            memberTicketReq.setStartStation(dailyTrainTicket.getStart());
-//            memberTicketReq.setStartTime(dailyTrainTicket.getStartTime());
-//            memberTicketReq.setEndStation(dailyTrainTicket.getEnd());
-//            memberTicketReq.setEndTime(dailyTrainTicket.getEndTime());
-//            memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
-//            CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
-//            LOG.info("调用member接口，返回：{}", commonResp);
-//
-//            // 更新订单状态为成功
-//            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
-//            confirmOrderForUpdate.setId(confirmOrder.getId());
-//            confirmOrderForUpdate.setUpdateTime(new Date());
-//            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
-//            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
+
+            // 调用会员服务接口，为会员增加一张车票
+            MemberTicketReq memberTicketReq = new MemberTicketReq();
+            memberTicketReq.setMemberId(confirmOrder.getMemberId());
+            memberTicketReq.setPassengerId(tickets.get(j).getPassengerId());
+            memberTicketReq.setPassengerName(tickets.get(j).getPassengerName());
+            memberTicketReq.setTrainDate(dailyTrainTicket.getDate());
+            memberTicketReq.setTrainCode(dailyTrainTicket.getTrainCode());
+            memberTicketReq.setCarriageIndex(dailyTrainSeat.getCarriageIndex());
+            memberTicketReq.setSeatRow(dailyTrainSeat.getRow());
+            memberTicketReq.setSeatCol(dailyTrainSeat.getCol());
+            memberTicketReq.setStartStation(dailyTrainTicket.getStart());
+            memberTicketReq.setStartTime(dailyTrainTicket.getStartTime());
+            memberTicketReq.setEndStation(dailyTrainTicket.getEnd());
+            memberTicketReq.setEndTime(dailyTrainTicket.getEndTime());
+            memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
+            CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
+            LOG.info("调用member接口，返回：{}", commonResp);
+
+            // 更新订单状态为成功
+            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
+            confirmOrderForUpdate.setId(confirmOrder.getId());
+            confirmOrderForUpdate.setUpdateTime(new Date());
+            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
+            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
 
             // 模拟调用方出现异常
             // Thread.sleep(10000);
