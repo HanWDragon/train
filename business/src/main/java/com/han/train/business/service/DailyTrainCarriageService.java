@@ -38,6 +38,7 @@ public class DailyTrainCarriageService {
     @Resource
     private TrainCarriageService trainCarriageService;
 
+
     public void save(DailyTrainCarriageSaveReq req) {
         DateTime now = DateTime.now();
 
