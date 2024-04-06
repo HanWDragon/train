@@ -2,6 +2,7 @@ package com.han.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.EnumUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.github.pagehelper.PageHelper;
@@ -10,11 +11,15 @@ import com.han.train.business.domain.ConfirmOrder;
 import com.han.train.business.domain.ConfirmOrderExample;
 import com.han.train.business.domain.DailyTrainTicket;
 import com.han.train.business.enums.ConfirmOrderStatusEnum;
+import com.han.train.business.enums.SeatTypeEnum;
 import com.han.train.business.mapper.ConfirmOrderMapper;
 import com.han.train.business.request.ConfirmOrderDoReq;
 import com.han.train.business.request.ConfirmOrderQueryReq;
+import com.han.train.business.request.ConfirmOrderTicketReq;
 import com.han.train.business.response.ConfirmOrderQueryResp;
 import com.han.train.common.context.LoginMemberContext;
+import com.han.train.common.exception.BusinessException;
+import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.common.response.PageResp;
 import com.han.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
@@ -103,5 +108,45 @@ public class ConfirmOrderService {
         DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(date, trainCode, start, end);
         LOG.info("查出余票记录:{}", dailyTrainTicket);
 
+//      预扣减余票数量，并判断余票是否足够
+        reduceTickets(req, dailyTrainTicket);
+
+    }
+
+    private static void reduceTickets(ConfirmOrderDoReq req, DailyTrainTicket dailyTrainTicket) {
+        for (ConfirmOrderTicketReq ticketReq : req.getTickets()) {
+            String seatTypeCode = ticketReq.getSeatTypeCode();
+            SeatTypeEnum seatTypeEnum = EnumUtil.getBy(SeatTypeEnum::getCode, seatTypeCode);
+            switch (seatTypeEnum) {
+                case YDZ -> {
+                    int countLeft = dailyTrainTicket.getYdz() - 1;
+                    if (countLeft < 0) {
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setYdz(countLeft);
+                }
+                case EDZ -> {
+                    int countLeft = dailyTrainTicket.getEdz() - 1;
+                    if (countLeft < 0) {
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setEdz(countLeft);
+                }
+                case RW -> {
+                    int countLeft = dailyTrainTicket.getRw() - 1;
+                    if (countLeft < 0) {
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setRw(countLeft);
+                }
+                case YW -> {
+                    int countLeft = dailyTrainTicket.getYw() - 1;
+                    if (countLeft < 0) {
+                        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR);
+                    }
+                    dailyTrainTicket.setYw(countLeft);
+                }
+            }
+        }
     }
 }
