@@ -130,7 +130,7 @@ public class ConfirmOrderService {
         // 计算相对第一个座位的偏移值
         // 比如选择的是C1,D2，则偏移值是：[0,5]
         // 比如选择的是A1,B1,C1，则偏移值是：[0,1,2]
-        ConfirmOrderTicketReq ticketReq0 = tickets.getFirst();
+        ConfirmOrderTicketReq ticketReq0 = tickets.get(0);
         if (StrUtil.isNotBlank(ticketReq0.getSeat())) {
             LOG.info("本次购票有选座");
             // 查出本次选座的座位类型都有哪些列，用于计算所选座位与第一个座位的偏离值
@@ -155,7 +155,7 @@ public class ConfirmOrderService {
             }
             LOG.info("计算得到所有座位的绝对偏移值：{}", aboluteOffsetList);
             for (Integer index : aboluteOffsetList) {
-                int offset = index - aboluteOffsetList.getFirst();
+                int offset = index - aboluteOffsetList.get(0);
                 offsetList.add(offset);
             }
             LOG.info("计算得到所有座位的相对第一个座位的偏移值：{}", offsetList);

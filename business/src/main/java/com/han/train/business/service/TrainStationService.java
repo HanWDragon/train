@@ -65,7 +65,7 @@ public class TrainStationService {
                 .andIndexEqualTo(index);
         List<TrainStation> list = trainStationMapper.selectByExample(trainStationExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }
@@ -78,7 +78,7 @@ public class TrainStationService {
                 .andNameEqualTo(name);
         List<TrainStation> list = trainStationMapper.selectByExample(trainStationExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }

@@ -57,7 +57,7 @@ public class StationService {
         stationExample.createCriteria().andNameEqualTo(name);
         List<Station> list = stationMapper.selectByExample(stationExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }

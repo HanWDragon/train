@@ -8,7 +8,10 @@ spring:
         - id: member
           predicates:
             - Path=/member/**
-          uri: http://127.0.0.1:8001
+          #          本机地址
+          #          uri: http://127.0.0.1:8001
+          #         nacos 配置的地址
+          uri: lb://member
         ### 路由转发，将/business/...的请求转发到business模块
         - id: business
           predicates:

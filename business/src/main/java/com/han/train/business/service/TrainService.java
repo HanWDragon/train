@@ -59,7 +59,7 @@ public class TrainService {
                 .andCodeEqualTo(code);
         List<Train> list = trainMapper.selectByExample(trainExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }

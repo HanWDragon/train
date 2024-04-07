@@ -66,7 +66,7 @@ public class TrainCarriageService {
                 .andIndexEqualTo(index);
         List<TrainCarriage> list = trainCarriageMapper.selectByExample(trainCarriageExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }

@@ -188,7 +188,7 @@ public class DailyTrainTicketService {
                 .andEndEqualTo(end);
         List<DailyTrainTicket> list = dailyTrainTicketMapper.selectByExample(dailyTrainTicketExample);
         if (CollUtil.isNotEmpty(list)) {
-            return list.getFirst();
+            return list.get(0);
         } else {
             return null;
         }
