@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Date;
 
 //@FeignClient(value = "business", fallback = BusinessFeignFallback.class)
- @FeignClient(name = "business", url = "http://127.0.0.1:8002/business")
+// @FeignClient(name = "business", url = "http://127.0.0.1:8002/business")
+// 这个名字代表的就是 ip + port
+@FeignClient(name = "business")
 public interface BusinessFeign {
 
-    @GetMapping("/hello")
+    @GetMapping("/business/hello")
     String hello();
 
-    @GetMapping("/admin/daily-train/gen-daily/{date}")
+    @GetMapping("/business/admin/daily-train/gen-daily/{date}")
     CommonResp<Object> genDaily(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date);
 }
