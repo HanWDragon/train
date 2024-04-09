@@ -11,11 +11,12 @@ import com.han.train.business.mapper.customer.DailyTrainTicketCustomerMapper;
 import com.han.train.business.request.ConfirmOrderTicketReq;
 import com.han.train.common.request.MemberTicketReq;
 import com.han.train.common.response.CommonResp;
+import io.seata.core.context.RootContext;
+import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -45,10 +46,11 @@ public class AfterConfirmOrderService {
      * 为会员增加购票记录
      * 更新确认订单为成功
      */
-//     @GlobalTransactional
-    @Transactional
+//    @Transactional
+    @GlobalTransactional
     public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets, ConfirmOrder confirmOrder) throws Exception {
 
+        LOG.info("seata全局事务ID: {}", RootContext.getXID());
         for (int j = 0; j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
             DailyTrainSeat seatForUpdate = new DailyTrainSeat();
@@ -120,6 +122,7 @@ public class AfterConfirmOrderService {
             memberTicketReq.setEndStation(dailyTrainTicket.getEnd());
             memberTicketReq.setEndTime(dailyTrainTicket.getEndTime());
             memberTicketReq.setSeatType(dailyTrainSeat.getSeatType());
+//          这个就会出现一个问题，就是调用的接口成功，但是，更新订单数据失败，这样就会造成两端数据不一致
             CommonResp<Object> commonResp = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回：{}", commonResp);
 
@@ -130,11 +133,9 @@ public class AfterConfirmOrderService {
             confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
             confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
 
-            // 模拟调用方出现异常
-            // Thread.sleep(10000);
-            // if (1 == 1) {
-            //     throw new Exception("测试异常");
-            // }
+//             模拟调用方出现异常
+            Thread.sleep(10000);
+            throw new Exception("测试异常");
         }
     }
 }
