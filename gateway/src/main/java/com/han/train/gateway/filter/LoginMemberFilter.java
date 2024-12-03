@@ -26,6 +26,7 @@ public class LoginMemberFilter implements GlobalFilter, Ordered {
 
         // 排除不需要拦截的请求
         if (path.contains("/admin")
+                || path.contains("redis")
                 || path.contains("/hello")
                 || path.contains("/member/member/login")
                 || path.contains("/member/member/send_code")) {
