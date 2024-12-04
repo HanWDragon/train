@@ -27,11 +27,13 @@ import com.han.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ConfirmOrderService {
@@ -52,6 +54,9 @@ public class ConfirmOrderService {
 
     @Resource
     private AfterConfirmOrderService afterConfirmOrderService;
+
+    @Resource
+    private StringRedisTemplate redisTemplate;
 
     public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
@@ -93,7 +98,19 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
-    public synchronized void  doConfirm(ConfirmOrderDoReq req) {
+    public void  doConfirm(ConfirmOrderDoReq req) {
+
+        // 多个人抢同一个车次，这个场景需要加锁，但是多个人抢不同车次，其实是不相关的
+        String key = req.getDate() + "-" +req.getTrainCode();
+        Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, "1", 5, TimeUnit.SECONDS);
+        if (Boolean.TRUE.equals(ifAbsent)) {
+            LOG.info("恭喜，抢到锁了");
+        } else {
+            // 只是没有抢到锁，并不是没有票，所以需要提示请重试
+            LOG.info("很遗憾，没抢到锁");
+            throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
+        }
+
 //       省略业务数据校验，eg：同乘客同车次是否买过，车次是否在有效期等等，前端正常发来的信息都是符合的
 
 //        保存确认订单表，状态初始
