@@ -93,7 +93,7 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
-    public void doConfirm(ConfirmOrderDoReq req) {
+    public synchronized void  doConfirm(ConfirmOrderDoReq req) {
 //       省略业务数据校验，eg：同乘客同车次是否买过，车次是否在有效期等等，前端正常发来的信息都是符合的
 
 //        保存确认订单表，状态初始
