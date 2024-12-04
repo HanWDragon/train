@@ -1,0 +1,28 @@
+POST http://localhost:8000/business/confirm-order/do
+Content-Type: application/json
+token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE3MzMzMzMyMDMsIm1vYmlsZSI6IjEzOTk1NjUzODUwIiwiaWQiOjE3MzgzNjYzOTI4ODcwMjE1NjgsImV4cCI6MTczMzQxOTYwMywiaWF0IjoxNzMzMzMzMjAzfQ.JUkEfDTyz3U_QQsIml1F15KkgpflchiSHWjo7R9forQ
+
+{
+  "dailyTrainTicketId": 1788175916380327936,
+  "date": "2024-05-10",
+  "end": "黄冈西站",
+  "imageCode": null,
+  "memberId": null,
+  "start": "团风站",
+  "tickets": [
+    {
+      "passengerId": 1776231580319223808,
+      "passengerIdCard": "421121200202100012",
+      "passengerName": "萧婧思",
+      "passengerType": "3",
+      "seat": null,
+      "seatTypeCode": "1"
+    }
+  ],
+  "trainCode": "D1"
+}
+###
+
+GET http://localhost:8000/business/confirm-order/query-line-count/1662452972099080192
+Content-Type: application/json
+token: {{token}}
