@@ -27,6 +27,7 @@ import com.han.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,7 @@ public class ConfirmOrderService {
     @Resource
     private AfterConfirmOrderService afterConfirmOrderService;
 
-    @Resource
+    @Autowired
     private StringRedisTemplate redisTemplate;
 
     public void save(ConfirmOrderDoReq req) {
@@ -98,11 +99,13 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
-    public void  doConfirm(ConfirmOrderDoReq req) {
+    public void doConfirm(ConfirmOrderDoReq req) {
 
         // 多个人抢同一个车次，这个场景需要加锁，但是多个人抢不同车次，其实是不相关的
-        String key = req.getDate() + "-" +req.getTrainCode();
-        Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, "1", 5, TimeUnit.SECONDS);
+        String key = req.getDate() + "-" + req.getTrainCode();
+        Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, "1", 1, TimeUnit.SECONDS);
+
+
         if (Boolean.TRUE.equals(ifAbsent)) {
             LOG.info("恭喜，抢到锁了");
         } else {
@@ -217,6 +220,16 @@ public class ConfirmOrderService {
             throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_EXCEPTION);
         }
 
+        // 删除分布式锁
+        /**
+         * 分布式锁常见的问题：没拿到锁的线程把别人的锁删了，解法有 2 种
+         * 1. 不管咋样都先上锁，加锁不要放在 try 里
+         * 2. 加锁时，将当前线程 ID 放到锁对应的 Value中，删除时先去获取 Value，一致才能删除
+         */
+        LOG.info("购票结束，释放锁");
+        redisTemplate.delete(key);
+
+
     }
 
     /**
@@ -260,7 +273,6 @@ public class ConfirmOrderService {
 
     /**
      * 挑座位，如果有选座，则一次性挑完，如果无选座，则一个一个挑
-     *
      */
     private void getSeat(List<DailyTrainSeat> finalSeatList, Date date, String trainCode, String seatType, String column, List<Integer> offsetList, Integer startIndex, Integer endIndex) {
         List<DailyTrainSeat> getSeatList = new ArrayList<>();
