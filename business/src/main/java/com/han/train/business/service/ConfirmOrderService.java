@@ -257,7 +257,7 @@ public class ConfirmOrderService {
         } catch (InterruptedException e) {
             Log.error("购票异常", e);
         } finally {
-            LOG.info("购票结束，释放锁");
+            LOG.info("购票结束，释放锁，Key:{}",key);
             if (null != lock && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
