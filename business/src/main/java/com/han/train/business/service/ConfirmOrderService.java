@@ -4,11 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.unit.DataUnit;
 import cn.hutool.core.util.EnumUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson2.JSON;
 import com.esotericsoftware.minlog.Log;
 import com.github.pagehelper.PageHelper;
@@ -30,7 +31,6 @@ import com.han.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.redisson.client.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +108,7 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
+    @SentinelResource( value = "doConfirm", blockHandler = "doConfirmBlock")
     public void doConfirm(ConfirmOrderDoReq req) {
 
         // 多个人抢同一个车次，这个场景需要加锁，但是多个人抢不同车次，其实是不相关的
@@ -440,4 +441,15 @@ public class ConfirmOrderService {
             }
         }
     }
+
+    /**
+     * 降级方法，需包含限流方法的所有参数和BlockException参数
+     * @param req
+     * @param e
+     */
+    public void doConfirmBlock(ConfirmOrderDoReq req, BlockException e) {
+        LOG.info("购票请求被限流：{}", req);
+        throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_FLOW_EXCEPTION);
+    }
+
 }
