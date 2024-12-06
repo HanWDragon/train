@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.han.train.business.domain.SkToken;
 import com.han.train.business.domain.SkTokenExample;
+import com.han.train.business.enums.RedisKeyPreEnum;
 import com.han.train.business.mapper.SkTokenMapper;
 import com.han.train.business.mapper.customer.SkTokenCustomerMapper;
 import com.han.train.business.request.SkTokenQueryReq;
@@ -88,7 +89,7 @@ public class SkTokenService {
         // 先获取令牌锁，再校验令牌余量，防止机器人抢票，lockKey就是令牌，用来表示【谁能做什么】的一个凭证
         // 这里并不需要释放锁，要不然同一个人又可以进来抢票，不需要使用有看门狗，倒计时结束就释放，避免同一个人大量请求
         RLock lock;
-        String key = DateUtil.formatDate(date) + "-" + trainCode + "-" + memberId;
+        String key = RedisKeyPreEnum.SK_TOKEN + "-" + DateUtil.formatDate(date) + "-" + trainCode + "-" + memberId;
         try {
             lock = redissonClient.getLock(key);
             boolean tryLock = lock.tryLock(0, 5, TimeUnit.SECONDS); // 不带看门狗，倒计时5s自动释放，避免同一个人刷

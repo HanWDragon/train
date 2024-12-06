@@ -16,6 +16,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.han.train.business.domain.*;
 import com.han.train.business.enums.ConfirmOrderStatusEnum;
+import com.han.train.business.enums.RedisKeyPreEnum;
 import com.han.train.business.enums.SeatColEnum;
 import com.han.train.business.enums.SeatTypeEnum;
 import com.han.train.business.mapper.ConfirmOrderMapper;
@@ -125,7 +126,7 @@ public class ConfirmOrderService {
 
 
         // 多个人抢同一个车次，这个场景需要加锁，但是多个人抢不同车次，其实是不相关的
-        String key = DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
+        String key = RedisKeyPreEnum.CONFIRM_ORDER + "-" + DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
 
 
 //        Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent(key, "1", 1, TimeUnit.SECONDS);
