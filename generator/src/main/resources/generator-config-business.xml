@@ -23,7 +23,7 @@
 
         <!-- 配置数据源，需要根据自己的项目修改 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://sh-cynosdbmysql-grp-cncc1bq2.sql.tencentcdb.com:23129/train_business?serverTimezone=Asia/Shanghai"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/train_business?serverTimezone=Asia/Shanghai"
                         userId="train_business"
                         password="Train_business">
         </jdbcConnection>
@@ -53,6 +53,7 @@
 <!--        <table tableName="daily_train_carriage" domainObjectName="DailyTrainCarriage"/>-->
 <!--        <table tableName="daily_train_seat" domainObjectName="DailyTrainSeat"/>-->
         <!--        <table tableName="daily_train_ticket" domainObjectName="DailyTrainTicket"/>-->
-        <table tableName="confirm_order" domainObjectName="ConfirmOrder"/>
+        <!--        <table tableName="confirm_order" domainObjectName="ConfirmOrder"/>-->
+        <table tableName="sk_token" domainObjectName="SkToken"/>
     </context>
 </generatorConfiguration>
