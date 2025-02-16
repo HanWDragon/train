@@ -1,7 +1,7 @@
 package com.han.train.business.mq;
 
 import com.alibaba.fastjson2.JSON;
-import com.han.train.business.request.ConfirmOrderDoReq;
+import com.han.train.business.dto.ConfirmOrderMQDto;
 import com.han.train.business.service.ConfirmOrderService;
 import jakarta.annotation.Resource;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -24,7 +24,7 @@ public class ConfirmOrderConsumer implements RocketMQListener<MessageExt> {
     @Override
     public void onMessage(MessageExt messageExt) {
         byte[] body = messageExt.getBody();
-        ConfirmOrderDoReq req = JSON.parseObject(new String(body), ConfirmOrderDoReq.class);
+        ConfirmOrderMQDto req = JSON.parseObject(new String(body), ConfirmOrderMQDto.class);
         MDC.put("LOG_ID", req.getLogId());
         LOG.info("ROCKETMQ收到消息：{}", new String(body));
         confirmOrderService.doConfirm(req);
