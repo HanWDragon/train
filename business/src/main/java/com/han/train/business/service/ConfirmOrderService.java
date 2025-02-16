@@ -190,6 +190,7 @@ public class ConfirmOrderService {
                         sell(confirmOrder);
                     } catch (BusinessException e) {
                         if (e.getE().equals(BusinessExceptionEnum.CONFIRM_ORDER_TICKET_COUNT_ERROR)) {
+                            // 这里没票可能是 A -> B 没票，不一定代表 C -> D 没票
                             LOG.info("本订单余票不足，继续售卖下一个订单");
                             confirmOrder.setStatus(ConfirmOrderStatusEnum.EMPTY.getCode());
                             updateStatus(confirmOrder);
