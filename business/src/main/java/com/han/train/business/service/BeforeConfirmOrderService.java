@@ -4,8 +4,10 @@ package com.han.train.business.service;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.fastjson2.JSON;
 import com.esotericsoftware.minlog.Log;
 import com.han.train.business.enums.RedisKeyPreEnum;
+import com.han.train.business.enums.RocketMQTopicEnum;
 import com.han.train.business.mapper.ConfirmOrderMapper;
 import com.han.train.business.request.ConfirmOrderDoReq;
 import com.han.train.common.context.LoginMemberContext;
@@ -80,7 +82,7 @@ public class BeforeConfirmOrderService {
             // boolean tryLock = lock.tryLock(30, 10, TimeUnit.SECONDS); // 不带看门狗
             boolean tryLock = lock.tryLock(0, TimeUnit.SECONDS); // 带看门狗
             if (tryLock) {
-                LOG.info("恭喜，抢到锁了！");
+                LOG.info("恭喜，抢到锁了，Key={}！", key);
                 // 可以把下面这段放开，只用一个线程来测试，看看redisson的看门狗效果
                 // for (int i = 0; i < 30; i++) {
                 //     Long expire = redisTemplate.opsForValue().getOperations().getExpire(lockKey);
@@ -89,12 +91,15 @@ public class BeforeConfirmOrderService {
                 // }
             } else {
                 // 只是没抢到锁，并不知道票抢完了没，所以提示稍候再试
-                LOG.info("很遗憾，没抢到锁");
+                LOG.info("很遗憾，没抢到锁，Key={}！", key);
                 throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
             }
 
-            //TODO 准备 MQ 相关代码
-            LOG.info("准备发送信息到MQ，等待出票");
+            // 发送MQ排队购票
+            String reqJson = JSON.toJSONString(req);
+            LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
+            rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
+            LOG.info("排队购票，发送mq结束");
 
 
         } catch (InterruptedException e) {
