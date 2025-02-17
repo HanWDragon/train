@@ -141,21 +141,21 @@
     <a-button danger block @click="validFirstImageCode">提交验证码</a-button>
   </a-modal>
 
-  <!--  <a-modal v-model:visible="lineModalVisible" title="排队购票" :footer="null" :maskClosable="false" :closable="false"-->
-  <!--           style="top: 50px; width: 400px">-->
-  <!--    <div class="book-line">-->
-  <!--      <div v-show="confirmOrderLineCount < 0">-->
-  <!--        <loading-outlined/>-->
-  <!--        系统正在处理中...-->
-  <!--      </div>-->
-  <!--      <div v-show="confirmOrderLineCount >= 0">-->
-  <!--        <loading-outlined/>-->
-  <!--        您前面还有{{ confirmOrderLineCount }}位用户在购票，排队中，请稍候-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <br/>-->
-  <!--    <a-button danger @click="onCancelOrder">取消购票</a-button>-->
-  <!--  </a-modal>-->
+  <a-modal v-model:visible="lineModalVisible" title="排队购票" :footer="null" :maskClosable="false" :closable="false"
+           style="top: 50px; width: 400px">
+    <div class="book-line">
+      <!--        <div v-show="confirmOrderLineCount < 0">-->
+      <loading-outlined/>
+      系统正在处理中...
+      <!--        </div>-->
+      <!--        <div v-show="confirmOrderLineCount >= 0">-->
+      <!--          <loading-outlined/>-->
+      <!--          您前面还有{{ confirmOrderLineCount }}位用户在购票，排队中，请稍候-->
+      <!--        </div>-->
+    </div>
+    <!--      <br/>-->
+    <!--      <a-button danger @click="onCancelOrder">取消购票</a-button>-->
+  </a-modal>
 </template>
 
 <script>
@@ -387,10 +387,10 @@ export default defineComponent({
       }).then((response) => {
         let data = response.data;
         if (data.success) {
-          notification.success({message: "下单成功！"});
-          // visible.value = false;
-          // imageCodeModalVisible.value = false;
-          // lineModalVisible.value = true;
+          // notification.success({message: "下单成功！"});
+          visible.value = false;
+          imageCodeModalVisible.value = false;
+          lineModalVisible.value = true;
           // confirmOrderId.value = data.content;
           // queryLineCount();
         } else {

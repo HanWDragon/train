@@ -24,6 +24,7 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,9 @@ public class SkTokenService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Value("${spring.profiles.active}")
+    private String env;
 
     /**
      * 初始化
@@ -93,20 +97,25 @@ public class SkTokenService {
 
         // 先获取令牌锁，再校验令牌余量，防止机器人抢票，lockKey就是令牌，用来表示【谁能做什么】的一个凭证
         // 这里并不需要释放锁，要不然同一个人又可以进来抢票，不需要使用有看门狗，倒计时结束就释放，避免同一个人大量请求
-        RLock lock;
-        String key = RedisKeyPreEnum.SK_TOKEN + "-" + DateUtil.formatDate(date) + "-" + trainCode + "-" + memberId;
-        try {
-            lock = redissonClient.getLock(key);
-            boolean tryLock = lock.tryLock(0, 5, TimeUnit.SECONDS); // 不带看门狗，倒计时5s自动释放，避免同一个人刷
-            if (tryLock) {
-                LOG.info("恭喜，抢到令牌锁了！key：{}", key);
-            } else {
-                // 只是没抢到锁，并不知道票抢完了没，所以提示稍候再试
-                LOG.info("很遗憾，没抢到令牌锁！key：{}", key);
-                return false;
+
+
+        // 压测
+        if (!env.equals("dev")) {
+            RLock lock;
+            String key = RedisKeyPreEnum.SK_TOKEN + "-" + DateUtil.formatDate(date) + "-" + trainCode + "-" + memberId;
+            try {
+                lock = redissonClient.getLock(key);
+                boolean tryLock = lock.tryLock(0, 5, TimeUnit.SECONDS); // 不带看门狗，倒计时5s自动释放，避免同一个人刷
+                if (tryLock) {
+                    LOG.info("恭喜，抢到令牌锁了！key：{}", key);
+                } else {
+                    // 只是没抢到锁，并不知道票抢完了没，所以提示稍候再试
+                    LOG.info("很遗憾，没抢到令牌锁！key：{}", key);
+                    return false;
+                }
+            } catch (InterruptedException e) {
+                Log.error("获取令牌锁异常", e);
             }
-        } catch (InterruptedException e) {
-            Log.error("获取令牌锁异常", e);
         }
 
         String skTokenCountKey = RedisKeyPreEnum.SK_TOKEN_COUNT + "-" + DateUtil.formatDate(date) + "-" + trainCode;
