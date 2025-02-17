@@ -70,6 +70,7 @@
 
 
     <build>
+        <finalName>/dist/${project.artifactId}</finalName>
         <plugins>
             <!-- mybatis generator 自动生成代码插件 -->
             <plugin>
@@ -78,7 +79,7 @@
                 <version>1.4.2</version>
 
                 <configuration>
-                    <!--                    <configurationFile>src/main/resources/generator-config-member.xml</configurationFile>-->
+                    <!--<configurationFile>src/main/resources/generator-config-member.xml</configurationFile>-->
                     <configurationFile>src/main/resources/generator-config-business.xml</configurationFile>
 <!--                    <configurationFile>src/main/resources/generator-config-batch.xml</configurationFile>-->
                     <overwrite>true</overwrite>

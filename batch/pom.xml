@@ -62,10 +62,14 @@
     </dependencies>
 
     <build>
+        <finalName>/dist/${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
             </plugin>
 
             <!-- 配置当前项目的jdk版本信息 -->

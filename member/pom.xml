@@ -11,12 +11,6 @@
 
     <artifactId>member</artifactId>
 
-    <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
 <!--    剩余依赖统一添加到common类中-->
     <dependencies>
         <dependency>
@@ -47,10 +41,14 @@
     </dependencies>
 
     <build>
+        <finalName>/dist/${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
             </plugin>
 
             <!-- 配置当前项目的jdk版本信息 -->
