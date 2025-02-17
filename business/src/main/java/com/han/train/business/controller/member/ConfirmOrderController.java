@@ -5,6 +5,7 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.han.train.business.request.ConfirmOrderDoReq;
 import com.han.train.business.service.BeforeConfirmOrderService;
+import com.han.train.business.service.ConfirmOrderService;
 import com.han.train.common.exception.BusinessExceptionEnum;
 import com.han.train.common.response.CommonResp;
 import jakarta.annotation.Resource;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/confirm-order")
@@ -32,6 +30,9 @@ public class ConfirmOrderController {
 
     @Resource
     private BeforeConfirmOrderService beforeConfirmOrderService;
+
+    @Resource
+    private ConfirmOrderService confirmOrderService;
 
     @Value("${spring.profiles.active}")
     private String env;
@@ -63,6 +64,12 @@ public class ConfirmOrderController {
         Long id = beforeConfirmOrderService.beforeDoConfirm(req);
         // 转成 String 避免精度丢失
         return new CommonResp<>(String.valueOf(id));
+    }
+
+    @GetMapping("/query-line-count/{id}")
+    public CommonResp<Integer> queryLineCount(@PathVariable Long id) {
+        Integer count = confirmOrderService.queryLineCount(id);
+        return new CommonResp<>(count);
     }
 
     /**
