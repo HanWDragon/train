@@ -264,6 +264,14 @@ public class ConfirmOrderService {
      * @param confirmOrder
      */
     private void sell(ConfirmOrder confirmOrder) {
+
+        // 演示排队效果，每次出票增加 200 ms 延迟
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         // 构造ConfirmOrderDoReq
         ConfirmOrderDoReq req = new ConfirmOrderDoReq();
         req.setMemberId(confirmOrder.getMemberId());
