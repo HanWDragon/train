@@ -43,7 +43,7 @@ public class BeforeConfirmOrderService {
 
 
     @SentinelResource(value = "beforeDoConfirm", blockHandler = "beforeDoConfirmBlock")
-    public void beforeDoConfirm(ConfirmOrderDoReq req) {
+    public Long beforeDoConfirm(ConfirmOrderDoReq req) {
 
         // 塞入到 MQ 消费后无法通过拦截器获取用户 ID，主动加入
         req.setMemberId(LoginMemberContext.getId());
@@ -91,6 +91,8 @@ public class BeforeConfirmOrderService {
         LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
         rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
         LOG.info("排队购票，发送mq结束");
+
+        return confirmOrder.getId();
 
     }
 

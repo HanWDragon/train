@@ -146,7 +146,7 @@
     <div class="book-line">
       <!--        <div v-show="confirmOrderLineCount < 0">-->
       <loading-outlined/>
-      系统正在处理中...
+      确认订单：{{ confirmOrderId }} 系统正在处理中...
       <!--        </div>-->
       <!--        <div v-show="confirmOrderLineCount >= 0">-->
       <!--          <loading-outlined/>-->
@@ -391,7 +391,7 @@ export default defineComponent({
           visible.value = false;
           imageCodeModalVisible.value = false;
           lineModalVisible.value = true;
-          // confirmOrderId.value = data.content;
+          confirmOrderId.value = data.content;
           // queryLineCount();
         } else {
           notification.error({message: data.message});
